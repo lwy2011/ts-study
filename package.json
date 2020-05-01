@@ -1,0 +1,9 @@
+{
+  "name": "ts-study",
+  "version": "1.0.0",
+  "description": "study ts",
+  "main": "index.js",
+  "repository": "git@github.com:liuwanyong2017/ts-study.git",
+  "author": "流着万条永远的河",
+  "license": "MIT"
+}
