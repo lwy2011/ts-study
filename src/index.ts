@@ -207,18 +207,68 @@ let n1: number | null = 5;  //这样保险！
         a: 2, b: 7
     };
     let {a, b}: { a: number, b: number } = o;
-    const y = (o:{a:number,b?:string})=>{
-        const {a,b='d'} = o  //默认值
-    }
-    type C = {a:string,b?:number}
+    const y = (o: { a: number, b?: string }) => {
+        const {a, b = "d"} = o;  //默认值
+    };
+    type C = { a: string, b?: number }
 
     //默认值：
-    function m({a,b=0}={a:'l'}):void {
+    function m({a, b = 0} = {a: "l"}): void {
 
     }
-    m()
-    m({})  //报错！ 这时候合并的是 {a,b=0} 和{},a没值！
 
+    m();
+    m({});  //报错！ 这时候合并的是 {a,b=0} 和{},a没值！
+}
+
+{
+    //接口：
+    interface Label {
+        label: string
+    }
+
+    let a: Label;
+    a = {x: 0, label: "d"};
+    let b = {x: 0, label: "d"};
+    const x = (a: Label) => {
+
+    };
+    x(b);  //不做类型注解，就会不全等于，有label就可，做了类型注解，就要完全一致！！
+
+    //可选属性：
+    interface Square {
+        color: string,
+        area: number
+    }
+
+    interface Cases {
+        color?: string,
+        width?: number
+    }
+
+    const getSquare = (o: Cases): Square => {
+        const init = {
+            color: "red", width: 100
+        };
+        o = {...o, ...init};
+        return {
+            color: o.color, area: o.width * o.width
+        };
+    };
+
+    //只读：
+    interface Msg {
+        readonly x:number
+    }
+    let v:Msg ={x:6}
+    v.x =0
+
+    let arr3 :number[] = [4,6,7]
+    let ro:ReadonlyArray<number> = arr3
+    ro[1] =8
+    arr3[1] = 8
+    (ro as number[])[1] =8
+    //不变的属性常量的时候用！
 
 
 }
