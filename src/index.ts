@@ -243,7 +243,8 @@ let n1: number | null = 5;  //这样保险！
 
     interface Cases {
         color?: string,
-        width?: number
+        width?: number,
+        // [key:string]:any   //可索引类型
     }
 
     const getSquare = (o: Cases): Square => {
@@ -256,22 +257,288 @@ let n1: number | null = 5;  //这样保险！
         };
     };
 
+    getSquare({colord: "df", width: 8});
+    //这里要么就 {...} as Cases,要么就用可索引类型！！
+    //可以用 let o = {colord:...}，然后把o传给函数，利用o没声明类型，但是失去了ts的精髓了！
+
+
     //只读：
     interface Msg {
-        readonly x:number
+        readonly x: number
     }
-    let v:Msg ={x:6}
-    v.x =0
 
-    let arr3 :number[] = [4,6,7]
-    let ro:ReadonlyArray<number> = arr3
-    ro[1] =8
+    let v: Msg = {x: 6};
+    v.x = 0;
+
+    let arr3: number[] = [4, 6, 7];
+    let ro: ReadonlyArray<number> = arr3;
+    ro[1] = 8;
     arr3[1] = 8
-    (ro as number[])[1] =8
+    (ro as number[])[1] = 8;
     //不变的属性常量的时候用！
 
+}
+{
+    // function
+    interface SearchFn {
+        (source: string, substring: string): boolean
+    }
+
+    // 参数,返回值的类型检测！
+}
+
+{
+    //索引
+    interface Arr {
+        [index: number]: string  //索引！
+        // 值可以 是number|string,其实就是key,key在js的对象中其实就是string
+    }
+
+    //但是同时出现key值设为number|string 的时候，就要看赋值的操作了！
+    //因为这种类型的数据实体，key为number的实际转化的时候key就是string类型的：
+    class Animal {
+    }
+
+    class Dog extends Animal {
+    }
+
+    interface O {
+        [k: number]: Animal,  //k是number，赋值时会转为string,倒时候检测会检测，
+        // number类的key 赋值原本符合Animal的，但是ts认为是string的k，结果应该是Dog类的！
+        [k: string]: Dog
+    }
+
+    //这里的意思就是，我们的string类的索引的类型，要是number索引的类型的父级！
+    interface W {
+        [k: string]: number,
+
+        length: number,
+        name: string    //会报错！因为跟 [k:string]:number冲突了！
+        //这里可以看出来，索引类型，使得同级的其他的k的值都得是它的父级类型！否则报错！
+    }
+
+    //readonly:
+    interface Ro {
+        readonly [k: string]: number
+    }
+
+    const arr4: Ro = {x: 7};
+    arr4.x = 8;
+    arr4.y = 0;
 
 }
 
+{
+    // class，静态，实例，static的那里！
+    // 静态部分不会做检查的！只检查实例部分！
+    interface ClockInterface {  //实例接口
+        current: Date
 
+        setTime(t: Date)
+    }
 
+    interface ClockConstructore {  //构造器接口
+        new(h: number, m: number): ClockInterface
+    }
+
+    class Clock implements ClockInterface {
+        current: Date;   //实例
+        constructor(h: number, m: number) {  //私有静态，ts不会做检查的
+
+        }
+
+        setTime(t: Date) {   //实例；
+            this.current = t;
+        }
+    }
+
+    //区分开实例接口和构造器接口：
+    function createClock(constructor: ClockConstructore, h: number, m: number): ClockInterface {
+        return new constructor(h, m);
+    }
+
+    class AnalogClock implements ClockInterface {  //这本身就是个构造器：
+        constructor(h: number, m: number) {
+        }
+
+        setTime(t: Date) {
+        }
+
+        get current() {
+            return new Date();
+        }
+    }
+
+    let analog = createClock(AnalogClock, 12, 4); //构造实例了！
+}
+
+{
+    //继承接口：
+    interface Shap {
+        color: string
+    }
+
+    interface PenStroke {
+        penWidth: number
+    }
+
+    interface Squry extends Shap, PenStroke {  //继承多个接口
+        sideLength: number
+    }
+
+    let squry = {} as Squry;
+    squry.color = "d";
+    squry.penWidth = 9;
+}
+{
+    //混合类型
+    interface Counter {
+        (v: number): string
+
+        interval: number
+
+        reset(): void
+    }
+
+    const counter = (v: number): Counter => {
+        const fn = ((v) => {
+        }) as Counter;
+        fn.interval = 50;
+        fn.reset = () => {
+        };
+        return fn;
+    };
+}
+{
+    //接口继承类：
+    class Control {   //父类，
+        private state: any;   //私有
+    }
+
+    interface SelectableControl extends Control {  //接口继承了类：
+        select()
+    }
+
+    class Button extends Control implements SelectableControl { //子类可以实现接口
+        select() {
+        }
+    }
+
+    class CheckBox extends Control {  //单纯地继承类来模拟接口继承类
+        select() {
+        }
+    }
+
+    class A implements SelectableControl {  //不能实现了，因为这个接口有Control的私有属性！！
+        select() {
+        }
+    }
+
+    //接口继承类，这个接口其实就是这个类的子类！！！
+}
+{
+    //class 类
+    class Greeter {
+        greeting: string;  //这里需要注意一下！
+
+        constructor(msg: string) {
+            this.greeting = msg;
+        }
+
+        greet() {
+            return "hello! " + this.greeting;
+        }
+    }
+    let greet = new Greeter('liuliu')
+    greet.greet()
+
+    //继承：
+    class Animal {
+        name:string
+        constructor(name:string) {
+            this.name=name
+        }
+        move(distance:number){
+            console.log(`${this.name} moved ${distance}m`);
+        }
+    }
+    class Snake extends Animal{
+        constructor(name:string) {
+            super(name);   //父类的继承的那一步！
+        }
+        move(distance: number=5) {
+            console.log("moving");
+            super.move(distance);  //调用了父类的方法！
+        }
+    }
+    let tom =  new Snake('tom')
+    tom.move()
+}
+{
+    //公共私有受保护readonly:
+    //private:
+    class Animal {
+        private name:string
+        constructor(name) {
+            this.name = name
+        }
+        move(distance:number){}
+    }
+    new Animal('xxx').name   //error
+    class Rhino extends Animal{
+        constructor() {
+            super('rhino');
+        }
+    }
+    class Employee {
+        private name:string
+        constructor(name:string) {
+            this.name =name
+        }
+        move(distance:number){}
+    }
+    let animal = new Animal('h')
+    let rhino = new Rhino()
+    let employee = new Employee('ee')
+    rhino = animal   //类型推断，派生类当然是基类
+    rhino = employee   //类型推断，私有属性不是同源，不是源于animal！！
+
+    //protected:
+    class Person {
+        protected name:string
+        constructor(name:string) {
+            this.name = name
+        }
+    }
+    class Worker extends Person{
+        private department:string
+        constructor(name:string,department:string) {
+            super(name);
+            this.department=department
+        }
+        talkAbout(){
+            return `Hello,my name is ${this.name},and i work in ${this.department}`
+        }
+    }
+    const worker = new Worker('ll','sail')
+    worker.talkAbout()  //可以内部使用私有，受保护的！
+    worker.name
+    worker.department   //都不能访问，只能类的内部使用！！
+
+    //如果constructor函数也是protected了，那这个类就没法实例化了！编译会报错！
+
+    //readonly : 可访问，不可修改！
+    class A {
+        readonly name:string
+        constructor(name:string) {
+            this.name =name
+        }
+    }
+    const a = new A('a')
+    a.name = ''
+    //还有简写的形式：
+    class B {
+        constructor(readonly name:string) {  //这样写简单，但是不容易看懂！
+        }
+    }
+}
