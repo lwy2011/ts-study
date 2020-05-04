@@ -449,96 +449,265 @@ let n1: number | null = 5;  //这样保险！
             return "hello! " + this.greeting;
         }
     }
-    let greet = new Greeter('liuliu')
-    greet.greet()
+
+    let greet = new Greeter("liuliu");
+    greet.greet();
 
     //继承：
     class Animal {
-        name:string
-        constructor(name:string) {
-            this.name=name
+        name: string;
+
+        constructor(name: string) {
+            this.name = name;
         }
-        move(distance:number){
+
+        move(distance: number) {
             console.log(`${this.name} moved ${distance}m`);
         }
     }
-    class Snake extends Animal{
-        constructor(name:string) {
+
+    class Snake extends Animal {
+        constructor(name: string) {
             super(name);   //父类的继承的那一步！
         }
-        move(distance: number=5) {
+
+        move(distance: number = 5) {
             console.log("moving");
             super.move(distance);  //调用了父类的方法！
         }
     }
-    let tom =  new Snake('tom')
-    tom.move()
+
+    let tom = new Snake("tom");
+    tom.move();
 }
 {
     //公共私有受保护readonly:
     //private:
     class Animal {
-        private name:string
+        private name: string;
+
         constructor(name) {
-            this.name = name
+            this.name = name;
         }
-        move(distance:number){}
+
+        move(distance: number) {
+        }
     }
-    new Animal('xxx').name   //error
-    class Rhino extends Animal{
+
+    new Animal("xxx").name;   //error
+    class Rhino extends Animal {
         constructor() {
-            super('rhino');
+            super("rhino");
         }
     }
+
     class Employee {
-        private name:string
-        constructor(name:string) {
-            this.name =name
+        private name: string;
+
+        constructor(name: string) {
+            this.name = name;
         }
-        move(distance:number){}
+
+        move(distance: number) {
+        }
     }
-    let animal = new Animal('h')
-    let rhino = new Rhino()
-    let employee = new Employee('ee')
-    rhino = animal   //类型推断，派生类当然是基类
-    rhino = employee   //类型推断，私有属性不是同源，不是源于animal！！
+
+    let animal = new Animal("h");
+    let rhino = new Rhino();
+    let employee = new Employee("ee");
+    rhino = animal;   //类型推断，派生类当然是基类
+    rhino = employee;   //类型推断，私有属性不是同源，不是源于animal！！
 
     //protected:
     class Person {
-        protected name:string
-        constructor(name:string) {
-            this.name = name
+        protected name: string;
+
+        constructor(name: string) {
+            this.name = name;
         }
     }
-    class Worker extends Person{
-        private department:string
-        constructor(name:string,department:string) {
+
+    class Worker extends Person {
+        private department: string;
+
+        constructor(name: string, department: string) {
             super(name);
-            this.department=department
+            this.department = department;
         }
-        talkAbout(){
-            return `Hello,my name is ${this.name},and i work in ${this.department}`
+
+        talkAbout() {
+            return `Hello,my name is ${this.name},and i work in ${this.department}`;
         }
     }
-    const worker = new Worker('ll','sail')
-    worker.talkAbout()  //可以内部使用私有，受保护的！
-    worker.name
-    worker.department   //都不能访问，只能类的内部使用！！
+
+    const worker = new Worker("ll", "sail");
+    worker.talkAbout();  //可以内部使用私有，受保护的！
+    worker.name;
+    worker.department;   //都不能访问，只能类的内部使用！！
 
     //如果constructor函数也是protected了，那这个类就没法实例化了！编译会报错！
 
     //readonly : 可访问，不可修改！
     class A {
-        readonly name:string
-        constructor(name:string) {
-            this.name =name
+        readonly name: string;
+
+        constructor(name: string) {
+            this.name = name;
         }
     }
-    const a = new A('a')
-    a.name = ''
+
+    const a = new A("a");
+    a.name = "";
+
     //还有简写的形式：
     class B {
-        constructor(readonly name:string) {  //这样写简单，但是不容易看懂！
+        constructor(readonly name: string) {  //这样写简单，但是不容易看懂！
         }
+    }
+}
+{
+    //存取器，静态属性：
+    //存取器 ： get ,set ，用的是es5的object.defineProperty的get,set。
+    let passcode = "xxx";
+
+    class C {
+        private _fullName: string;
+        get fullName(): string {
+            return this._fullName;
+        }
+
+        set fullName(name: string) {
+            if (passcode && passcode === "xxx") {
+                this._fullName = name;
+            } else {
+                throw new Error("error: unauthorized update of this fullName");
+            }
+        }
+    }
+
+    //静态属性：static!!!跟js的类的静态属性方法没区别！
+    //静态属性归根到底，就是构造函数的属性，而不是构造函数的prototype上的属性！！！
+    class Grid {
+        static start = {x: 0, y: 0};
+        scale: number;
+
+        constructor(scale: number) {
+            this.scale = scale;
+        }
+
+        claculateDistanceToStart(end: { x: number, y: number }): number {
+            let Xdist = x - Grid.start.x,
+                Ydist = y - Grid.start.y;
+            return Math.sqrt(Xdist * Xdist + Ydist * Ydist) * this.scale;
+        }
+    }
+}
+{
+    //抽象类：abstract
+    abstract class Department {   //抽象类不可以实例化！！因为里面有抽象的方法需要补全！
+        name: string;
+
+        constructor(name: string) {
+            this.name = name;
+        }
+
+        printName(): void {
+            `department name is ${this.name}`;
+        }
+
+        abstract printMeeting(): void    //抽象方法
+    }
+
+    class AccountingDepartment extends Department {
+        constructor() {
+            super("Acounting ");
+        }
+
+        printMeeting(): void {    //作为抽象类的子类，必须要把父类的抽象方法补全！
+            console.log("printMeeting!!");
+        }
+
+        fn() {
+
+        }
+    }
+
+    let department: Department;
+    department = new Department("ddfd");  //报错！
+    department = new AccountingDepartment();   //派生类不报错！
+    department.fn();   //报错，因为Department的类没有fn字段！！
+}
+{
+    //高级技巧：
+    //typeof XXX类，就拷贝了xxx类的数据成了一个新的数据，当然也是xxx类，
+    // 可以干嘛？可以修改这个拷贝的类数据的属性，方法，相当于克隆体了
+    class Greeter {
+        static defaultGreeting = "hello!";
+        greeting: string;
+
+        constructor(msg?: string) {
+            this.greeting = msg;
+        }
+
+        greet(): string {
+            return this.greeting || Greeter.defaultGreeting;
+        }
+    }
+
+    const greeterCopy: typeof Greeter = Greeter;
+    greeterCopy.defaultGreeting = "oh?";
+    const greeter1: Greeter = new greeterCopy();
+}
+{
+    //class 作为接口使用：通常不建议如此用！
+    class Point {
+        x: number;
+    ,
+        y: number;
+    }
+
+    interface Point3d extends Point {
+        z: number
+    }
+}
+{
+    //函数：
+    function add(x: number, y: number): number {
+        return x + y;
+    }
+
+    const add: (x: number, y: number) => number =
+        function (x, y): number {
+            return x + y;
+        };
+    //函数类型，返回值都要写，不能留空！
+    //ts可以推断类型的，所以上面的不必都写：
+    const add1 = (x: number, y: number): number => x + y,
+        add2: (x: number, y: number) => number = (x, y) => x + y;
+}
+{
+    //可选参数，默认参数，数量，类型一一对应！！数量不一致，类型不一致
+    // 数量不一致，报错！
+    //可选参数 ？ ，必须要放必须参数后面！！
+    function fullName(firstN: string, lastN: string): string {
+        return firstN + lastN;
+    }
+    fullName('s')
+    fullName('d','s')
+    fullName('d','s','s')
+    //可选
+    function fullName1(firstN: string, lastN?: string): string {
+        return firstN + lastN;
+    }
+    fullName1('d')
+    //默认值，带默认值的最好放后面，否则前面的情况，传入还要传undefined！
+    function fullName2(firstN: string, lastN: string='h'): string {
+        return firstN + lastN;
+    }
+    fullName2('d')
+
+    //剩余参数：好用！
+    function fullName3(firstN: string,...restNames:string[]): string {
+        return firstN
     }
 }
