@@ -692,22 +692,154 @@ let n1: number | null = 5;  //这样保险！
     function fullName(firstN: string, lastN: string): string {
         return firstN + lastN;
     }
-    fullName('s')
-    fullName('d','s')
-    fullName('d','s','s')
+
+    fullName("s");
+    fullName("d", "s");
+    fullName("d", "s", "s");
+
     //可选
     function fullName1(firstN: string, lastN?: string): string {
         return firstN + lastN;
     }
-    fullName1('d')
+
+    fullName1("d");
+
     //默认值，带默认值的最好放后面，否则前面的情况，传入还要传undefined！
-    function fullName2(firstN: string, lastN: string='h'): string {
+    function fullName2(firstN: string, lastN: string = "h"): string {
         return firstN + lastN;
     }
-    fullName2('d')
+
+    fullName2("d");
 
     //剩余参数：好用！
-    function fullName3(firstN: string,...restNames:string[]): string {
-        return firstN
+    function fullName3(firstN: string, ...restNames: string[]): string {
+        return firstN;
     }
+}
+{
+    //this :
+    let deck = {
+        suits: ["hearts", "spades", "clubs", "diamonds"],
+        cards: Array(52),
+        createCardPicker: function () {
+            return function () {
+                let card = Math.floor(Math.random() * 52);
+                let suit = Math.floor(card / 13);
+                return {
+                    suit: this.suits[suit],
+                    card: card % 13
+                };
+            };
+        }
+    };
+    let cardPicker = deck.createCardPicker();
+    let picedCard = cardPicker();   //这里会报错！！
+    // 因为this.suits[suit]的this,是window了！
+    // 改造的话，就是用箭头函数做：
+    deck = {
+        suits: ["hearts", "spades", "clubs", "diamonds"],
+        cards: Array(52),
+        createCardPicker: function () {
+            return () => {
+                //这里会把this看成参数，而不是执行的上线文环境，它会保存函数创建时的this值！！！
+                let card = Math.floor(Math.random() * 52);
+                let suit = Math.floor(card / 13);
+                return {
+                    suit: this.suits[suit],
+                    card: card % 13
+                };
+            };
+        }
+    };
+
+    //ts 中的this,如果不专门指定，标注，默认推断成any类型,编译不会报错的！
+    // 提供显示的this参数比较好！是个假的参数，只出现在函数列表最前面：
+    function po(this: void) {
+    }  //函数中的this是空的，并不是说this是函数的参数！！
+
+    //上面的例子重构一下：
+    interface Card {
+        suit: string,
+        card: number
+    }
+
+    interface Deck {
+        suits: string[],
+        cards: number[],
+
+        createCardPicker(this: Deck): () => Card
+    }
+
+    let deck1: Deck = {
+        suits: ["hearts", "spades", "clubs", "diamonds"],
+        cards: Array(52),
+        createCardPicker: function (this: Deck) {
+            return () => {
+                let card = Math.floor(Math.random() * 52);
+                let suit = Math.floor(card / 13);
+                return {
+                    suit: this.suits[suit],
+                    card: card % 13
+                };
+            };
+        }
+    };
+
+    //this参数在回调函数里面：
+
+    interface UIElement {
+        addEventListener(onclick: (this: void, e: Event) => void)
+
+        //点名回调函数中的this是void!!
+    }
+
+    class Handler {
+        type: string;
+
+        onClickHandler(this: Handler, e: Event) {
+            this.type = e.type;
+        }
+    }
+
+    let h = new Handler();
+    let uiElement: UIElement = {
+        addEventListener(onclick: (this: void, e: Event) => void) {
+        }
+    };
+    uiElement.addEventListener(h.onClickHandler);
+    //这里报错是因为h.onClickHandler的指定的this不是void类型！！
+
+    //可以显式地把this改为void :
+
+    class Handler1 {
+        type: string;
+
+        onClickHandler(this: void, e: Event) {
+            this.type = e.type;    //但是这里会报错了！！
+        }
+    }
+
+    //还是用箭头函数靠谱的！！
+    class Handler2 {
+        type: string;
+        onClickHandler = (e: Event) => {
+            this.type = e.type;    //但是这里会报错了！！
+        };
+    }
+
+    //重载：当一个函数的参数很复杂时，情况很多时，可以一种情况一种情况地枚举，写类型：
+
+    function pickCard(x: string[]): string[]
+    function pickCard(x: number): number
+
+    function pickCard(x) {
+        if (Array.isArray(x)) {
+            x.push(1);
+            return x;
+        } else if (typeof x === "number") {
+            return x + 1;
+        }
+    }
+
+    //x有两种类型！！对这个函数进行重载：意义在于，精确检测参数的类型！
 }
