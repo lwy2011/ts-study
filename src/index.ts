@@ -843,3 +843,42 @@ let n1: number | null = 5;  //这样保险！
 
     //x有两种类型！！对这个函数进行重载：意义在于，精确检测参数的类型！
 }
+
+{
+    //泛型
+    //泛型变量：
+    function f(arg: any): any {
+        return arg;  //这里有隐患，就是arg改变了类型，依旧是any!
+    }
+
+    //泛型变量的好处是抽象出来一个代号类型！相当于一个类，
+    // 到时候谁用在哪里，赋值这个变量，相当于实例化的实例了
+    function f1<T>(arg: T): T {
+        return arg;
+    }
+    let f2 = f1<string>('xxx')
+    let f3 = f1('xxx')  //这是默认的类型推断！所以不报错！
+
+    //使用泛型变量的唯一目的，把参数当成所有类型，可以使用自己想要的参数的类型的属性方法！
+    function f4<T>(arg:T):T{
+        console.log(arg.length);  //T没有length属性！
+        return arg
+    }
+    // 如何改?
+    function f5<T>(arg:T[]):T[] {
+        console.log(arg.length);  //T[]有length属性！
+        return arg
+    }
+    //说明泛型变量跟参数的类型没有关系！！
+    // 我们的意图是用泛型变量来构建参数的类型的抽象模型！
+}
+{
+    //泛型类型：
+    let myIdentity:<T>(arg:T)=>T
+    let myIdentity1:{<T>(arg:T):T}  //对象字面量
+    //拿出对象字面量，放到接口里：高级抽象了！！
+    interface IdentityFn <T>{
+        (arg:T):T
+    }
+    let myIdentity2:IdentityFn<number>
+}
