@@ -856,29 +856,140 @@ let n1: number | null = 5;  //这样保险！
     function f1<T>(arg: T): T {
         return arg;
     }
-    let f2 = f1<string>('xxx')
-    let f3 = f1('xxx')  //这是默认的类型推断！所以不报错！
+
+    let f2 = f1<string>("xxx");
+    let f3 = f1("xxx");  //这是默认的类型推断！所以不报错！
 
     //使用泛型变量的唯一目的，把参数当成所有类型，可以使用自己想要的参数的类型的属性方法！
-    function f4<T>(arg:T):T{
+    function f4<T>(arg: T): T {
         console.log(arg.length);  //T没有length属性！
-        return arg
+        return arg;
     }
+
     // 如何改?
-    function f5<T>(arg:T[]):T[] {
+    function f5<T>(arg: T[]): T[] {
         console.log(arg.length);  //T[]有length属性！
-        return arg
+        return arg;
     }
+
     //说明泛型变量跟参数的类型没有关系！！
     // 我们的意图是用泛型变量来构建参数的类型的抽象模型！
 }
 {
     //泛型类型：
-    let myIdentity:<T>(arg:T)=>T
-    let myIdentity1:{<T>(arg:T):T}  //对象字面量
+    let myIdentity: <T>(arg: T) => T;
+    let myIdentity1: { <T>(arg: T): T };  //对象字面量
     //拿出对象字面量，放到接口里：高级抽象了！！
-    interface IdentityFn <T>{
-        (arg:T):T
+    interface IdentityFn<T> {
+        (arg: T): T
     }
-    let myIdentity2:IdentityFn<number>
+
+    let myIdentity2: IdentityFn<number>;
+}
+{
+    //泛类型
+    class GenericNumber<T> {
+        zeroValue: T;
+        add: (x: T, y: T) => T;
+    }
+
+    let genericNumber = new GenericNumber<number>();
+    genericNumber.zeroValue = 0;
+    genericNumber.add = (x, y) => x + y;
+    //当一个类的多处数据类型都是同一种类型的时候，就抽象出来！
+    //注意实例部分可以用泛型类！！静态类型部分不可以用泛型类，
+    // 因为静态部分没有实例化那一步，实例化的时候，是把抽象的泛型赋值的步骤！
+}
+{
+    //泛型约束：
+    function loggingIdentify<T>(arg: T): T {
+        console.log(arg.length);   //这里不行T有木有length属性不知道！
+        return arg;
+    }
+
+    interface LengthObj {
+        length: number
+    }
+
+    function loggingIdentify1<T extends LengthObj>(arg: T): T {
+        console.log(arg.length);   //这里不行T有木有length属性不知道！
+        return arg;
+    }
+
+    //这就大大扩充了泛型的生产力了！
+    //约束对象以及key：很实用！！！
+    function f2<T, K extends keyof T>(obj: T, key: K) {
+        return obj[key];
+    }
+
+    let obj = {s: 6, f: "g"};
+    f2(obj, "s");
+    f2(obj, "l");
+}
+{
+    //泛型使用类类型，构造器用泛型：
+    class BeeKeeper {
+        hasMask: boolean;
+    }
+
+    class LionKeeper {
+        nametag: string;
+    }
+
+    class Animal {
+        numLengths: number;
+    }
+
+    class Bee extends Animal {
+        keeper: BeeKeeper;
+    }
+
+    class Lion extends Animal {
+        keeper: LionKeeper;
+    }
+
+    function createInstance<T extends Animal>(C: new() => T): T {
+        return new C();
+    }
+
+    createInstance(Lion);  //类型推断出来T是哪个！
+}
+{
+    //类型推断，不指出来类型
+    let x = [2, "4", null];
+    x.push(undefined);
+
+    //最佳通用类型：
+    //推断的优先级，就是能联合类型就联合类型，取得是并集，而不是交集：
+    class Animal {
+        name: string;
+    }
+
+    class Bee extends Animal {
+
+    }
+
+    class Lion extends Animal {
+
+    }
+
+    const zoom = [new Bee(), new Lion()];
+    zoom.push();
+    //这里的推断是 Bee|Lion[]而不是Animal[]
+    // 明确点就是：
+    const zoom1: Animal[] = [new Bee(), new Lion()];
+
+
+    //上下文类型：
+    document.onclick = e => {
+        console.log(e.clickTime);  //推断e不可能有这个属性！类似于Vue的计算属性！！
+    };
+    // 只能显式告诉e的类型：
+    document.onclick = (e: any) => {
+        console.log(e.clickTime);
+    };
+
+    //其实下面的这个就是用的上下文类型做的推断，实现了最佳通用类型！！
+    // const zoom1: Animal[] = [new Bee(), new Lion()];
+
 }
