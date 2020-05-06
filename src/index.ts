@@ -991,5 +991,67 @@ let n1: number | null = 5;  //这样保险！
 
     //其实下面的这个就是用的上下文类型做的推断，实现了最佳通用类型！！
     // const zoom1: Animal[] = [new Bee(), new Lion()];
+}
+
+{
+    //交叉类型：取并集
+    function extend<T, U>(a: T, b: U): T & U {
+        const res = {} as T & U;
+        for (let key in a) {
+            res[key] = a[key] as any;   //这里是为了实现赋值的时候的 T 跟 T&U 的冲突
+        }
+        for (let key in b) {
+            if (!res[key]) {
+                res[key] = b[key] as any;
+            }
+        }
+        return res;
+    }
+    class Person {
+        constructor(public name:string) {
+        }
+    }
+    interface Loggable {
+        log():void
+    }
+    class ConsoleLogger implements Loggable {
+        log(): void {
+        }
+    }
+    let jim = extend(new Person('jim'),new ConsoleLogger())
+    jim.name
+    jim.log
+}
+{
+    //联合类型：
+    function f3(v:string,padding:any) {
+        if (typeof padding==='number'){
+            return Array(padding+1).join(' ')+v
+        }
+        if (typeof padding === 'string'){
+            return padding + v
+        }
+        throw new Error('padding type error!!')
+    }
+    f3('hh',true)  //没被检测出来！！
+    function f6(v:string,padding:string|number) {
+
+    }
+    f6('s','f')
+    f6('s',true)
+    interface Bird {
+        fly()
+        layEggs()
+    }
+    interface Fish {
+        swim()
+        layEggs()
+    }
+    function getSmallPet<T>(arg:T):T {
+        return arg
+    }
+    let bird:Bird
+    let pet = getSmallPet<Fish|Bird>(bird)
+    pet.swim()  //交集，而不是并集！！！
 
 }
