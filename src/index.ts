@@ -1007,51 +1007,162 @@ let n1: number | null = 5;  //这样保险！
         }
         return res;
     }
+
     class Person {
-        constructor(public name:string) {
+        constructor(public name: string) {
         }
     }
+
     interface Loggable {
-        log():void
+        log(): void
     }
+
     class ConsoleLogger implements Loggable {
         log(): void {
         }
     }
-    let jim = extend(new Person('jim'),new ConsoleLogger())
-    jim.name
-    jim.log
+
+    let jim = extend(new Person("jim"), new ConsoleLogger());
+    jim.name;
+    jim.log;
 }
 {
     //联合类型：
-    function f3(v:string,padding:any) {
-        if (typeof padding==='number'){
-            return Array(padding+1).join(' ')+v
+    function f3(v: string, padding: any) {
+        if (typeof padding === "number") {
+            return Array(padding + 1).join(" ") + v;
         }
-        if (typeof padding === 'string'){
-            return padding + v
+        if (typeof padding === "string") {
+            return padding + v;
         }
-        throw new Error('padding type error!!')
+        throw new Error("padding type error!!");
     }
-    f3('hh',true)  //没被检测出来！！
-    function f6(v:string,padding:string|number) {
+
+    f3("hh", true);  //没被检测出来！！
+    function f6(v: string, padding: string | number) {
 
     }
-    f6('s','f')
-    f6('s',true)
+
+    f6("s", "f");
+    f6("s", true);
+
     interface Bird {
         fly()
+
         layEggs()
     }
+
     interface Fish {
         swim()
+
         layEggs()
     }
-    function getSmallPet<T>(arg:T):T {
-        return arg
-    }
-    let bird:Bird
-    let pet = getSmallPet<Fish|Bird>(bird)
-    pet.swim()  //交集，而不是并集！！！
 
+    function getSmallPet<T>(arg: T): T {
+        return arg;
+    }
+
+    let bird: Bird;
+    let pet = getSmallPet<Fish | Bird>(bird);
+    pet.swim();  //交集，而不是并集！！！
+
+    if ((pet as Fish).swim) { //如此用！！
+        (pet as Fish).swim();
+    }
+
+    //类型保护：
+    //类型谓词 is
+    const isFish = (pet: Fish | Bird): pet is Fish => {
+        return (pet as Fish).swim !== undefined;
+    };
+    if (isFish(pet)) {
+        pet.swim();
+    } else {
+        pet.fly();
+    }
+
+    //typeof 可以用于基本类型的数据的类型保护，特殊的类型还是要用类型谓词做！
+
+    function paddingLeft(v: string, padding: number | string) {
+        if (typeof padding === "number") {
+            return Array(padding + 1).join(" ") + v;
+        } else {
+            return Array(padding.length);  //可以用length属性！！
+        }
+    }
+
+    //instanceof  类型保护：联合类的推断：
+    class A {
+        sayA() {
+
+        }
+    }
+
+    class B {
+        sayB() {
+
+        }
+    }
+
+    const c = (): A | B => {
+        return Math.random() > 0.5 ? new A() : new B();
+    };
+    const d = c();
+    if (d instanceof A) {
+        d.sayA();
+    } else {
+        d.sayB();
+    }
+}
+{
+    //null ,undefined任何类型的子类型！
+    // 默认认为可以赋值为null ,undefined，要开启对null ,undefined的类型检验设置才行
+    let s = "foo";
+    s = null;   //不会报错，需要ts设置null的严格模式检查！
+    let s1: string | null = "s";
+    s1 = null;
+    s1 = undefined;
+
+    function f7(x: number, y?: number) {
+
+    }
+
+    f7(3, 5);
+    f7(2);
+    f7();
+    f7(2, null);  //null严格模式下会报错！
+
+    //去除null :
+    function f8(v: string | null): string {
+        return v || " ";
+    }
+
+    //！断言成符合要求的数据类型：
+    function f9(name: string | null) {
+        function postFix(epither: string) {
+            return name.charCodeAt(0) + "the" + epither;
+            //这里的name可能为null，会报错的！
+        }
+
+        name = name || "default";
+        postFix(name);
+    }
+    function f10(name: string | null) {
+        function postFix(epither: string) {
+            return name!.charCodeAt(0) + "the" + epither;
+            //这里的name可能为null，!断言
+        }
+        name = name || "default";
+        postFix(name);
+    }
+}
+{
+    //字符串字面量：
+    type Easing = 'easy-in'|'easy-out'|'easy-in-out'
+    const f = (easy:Easing)=>{
+
+    }
+    f('easy-in')
+    f('easy')
+    f('null')
 }
