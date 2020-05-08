@@ -7,12 +7,9 @@
   "author": "流着万条永远的河",
   "license": "MIT",
   "scripts": {
-    "tsc": "tsc src/index.ts",
-    "watch": "tsc -w"
+    "tsc": "tsc index.ts"
   },
   "devDependencies": {
-    "typescript": "^3.8.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.11"
+    "typescript": "^3.8.3"
   }
 }
