@@ -7,9 +7,10 @@ type Methods = 'get' | 'GET'
 |'patch'|'PATCH'
 
 export interface RequireConfig {
-  url:string,
-  methods?:Methods,
-  data?:any,
+  url:string
+  methods?:Methods
+  data?:any
   params?:any
+  headers?:any
 }
 

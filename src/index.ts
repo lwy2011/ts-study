@@ -1,8 +1,8 @@
 import {RequireConfig} from "./types";
 import xml from "./xml";
 import makeURL from "./helpers/url";
-import {isPlainObject} from "./helpers/util";
 import transformReqData from "./helpers/data";
+import processHeaders from "./helpers/headers";
 
 const axios = (config: RequireConfig): void => {
   processConfig(config);
@@ -11,6 +11,7 @@ const axios = (config: RequireConfig): void => {
 
 function processConfig(config: RequireConfig) {
   config.url = transformURL(config);
+  config.headers = transformHeaders(config);
   config.data = transformRequireData(config);
 }
 
@@ -20,6 +21,10 @@ function transformURL({url, params}: RequireConfig): string {
 
 function transformRequireData({data}: RequireConfig) {
   return transformReqData(data);
+}
+
+function transformHeaders({headers={}, data}: RequireConfig) {
+  return processHeaders(headers, data);
 }
 
 export default axios;
