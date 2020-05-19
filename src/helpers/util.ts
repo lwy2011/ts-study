@@ -1,8 +1,8 @@
-const _toString: (a: any) => string = Object.prototype.toString;
+const _toString = Object.prototype.toString;
 
 
 const isDate = (obj: any): obj is Date => {
-  return _toString(obj) === "[object Date]";
+  return _toString.call(obj) === "[object Date]";
 };
 
 const isObject = (obj: any): obj is object => {
@@ -19,5 +19,7 @@ const encode = (str: string): string => {
     .replace(/%5B/ig, "[")
     .replace(/%5D/ig, "]");
 };
-
-export {isDate, isObject,encode};
+const isPlainObject = (obj: any): obj is object => {
+  return _toString.call(obj) === "[object Object]";
+};
+export {isDate, isObject, encode,isPlainObject};

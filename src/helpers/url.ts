@@ -1,4 +1,4 @@
-import {encode, isDate, isObject} from "./util";
+import {encode, isDate,  isPlainObject} from "./util";
 
 const makeURL = (url: string, params?: any): string => {
   const parts: string[] = [];
@@ -18,7 +18,7 @@ const makeURL = (url: string, params?: any): string => {
           val => {
             if (isDate(val)) {
               val = val.toISOString();
-            } else if (isObject(val)) {
+            } else if (isPlainObject(val)) {
               val = JSON.stringify(val);
             }
             parts.push(`${encode(key)}=${encode(val)}`);

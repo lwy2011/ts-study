@@ -15,7 +15,7 @@ axios(
     url: "/base/get",
     methods: "get",
     params: {
-      a: 1, b: [4,6,'hh']
+      a: 1, b: [4, 6, "hh"]
     }
   }
 );
@@ -33,7 +33,7 @@ axios(
     url: "/base/get",
     methods: "get",
     params: {
-      a: '@, '
+      a: "@, "
     }
   }
 );
@@ -42,8 +42,8 @@ axios(
     url: "/base/get#hash",
     methods: "get",
     params: {
-      a: 1,b:{
-        foo:'xxx'
+      a: 1, b: {
+        foo: "xxx"
       }
     }
   }
@@ -57,3 +57,17 @@ axios(
     }
   }
 );
+axios(
+  {
+    url: "/base/post",
+    methods: "post",
+    data: {
+      a: 1, b: [34, 66]
+    }
+  }
+);
+const arr = new Int32Array([20, 30]);
+axios({
+  methods: "post", url: "/base/buffer",
+  data: arr
+});
