@@ -25,6 +25,11 @@ router.get('/simple/get',(req,res)=>{
     msg:'hello!!'
   })
 })
+router.get('/base/get',(req,res)=>{
+  res.json({
+    msg:'base - params!!'
+  })
+})
 app.use(router)
 
 const port  = process.env.PORT || 8081
