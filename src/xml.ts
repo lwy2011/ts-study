@@ -1,4 +1,5 @@
 import {AxiosPromise, RequestConfig} from "./types";
+import {processResponseHeaders} from "./helpers/headers";
 
 const xml = (
   {
@@ -17,7 +18,7 @@ const xml = (
     }
     request.onreadystatechange = function () {
       if (request.readyState !== 4) return;
-      const headers = request.getAllResponseHeaders(),
+      const headers = processResponseHeaders(request.getAllResponseHeaders()),
         data = responseType === "text" ? request.responseText : request.response,
         response = {
           data,

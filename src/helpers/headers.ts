@@ -22,5 +22,19 @@ const processHeaders = (headers: any, data: any) => {
   console.log(headers);
   return headers;
 };
-
+export const processResponseHeaders = (str: string) => {
+  const headers = Object.create(null);
+  str.split("\r\n").map(
+    line => {
+      let [key, val] = line.split(":");
+      key = key.trim().toLowerCase();
+      if (!key) return;
+      if (val) {
+        val = val.trim();
+      }
+      headers[key] = val
+    }
+  );
+  return headers;
+};
 export default processHeaders;
