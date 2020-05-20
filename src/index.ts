@@ -1,29 +1,29 @@
-import {RequireConfig} from "./types";
+import {AxiosPromise, RequestConfig} from "./types";
 import xml from "./xml";
 import makeURL from "./helpers/url";
 import transformReqData from "./helpers/data";
 import processHeaders from "./helpers/headers";
 
-const axios = (config: RequireConfig): void => {
+const axios = (config: RequestConfig): AxiosPromise => {
   processConfig(config);
-  xml(config);
+  return xml(config);
 };
 
-function processConfig(config: RequireConfig) {
+function processConfig(config: RequestConfig) {
   config.url = transformURL(config);
   config.headers = transformHeaders(config);
   config.data = transformRequireData(config);
 }
 
-function transformURL({url, params}: RequireConfig): string {
+function transformURL({url, params}: RequestConfig): string {
   return makeURL(url, params);
 }
 
-function transformRequireData({data}: RequireConfig) {
+function transformRequireData({data}: RequestConfig) {
   return transformReqData(data);
 }
 
-function transformHeaders({headers={}, data}: RequireConfig) {
+function transformHeaders({headers={}, data}: RequestConfig) {
   return processHeaders(headers, data);
 }
 

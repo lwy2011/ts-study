@@ -1,21 +1,45 @@
-import {RequireConfig} from "./types";
+import {AxiosPromise, RequestConfig} from "./types";
 
 const xml = (
   {
     url,
     methods = "GET",
     data = null,
-    headers
-  }: RequireConfig): void => {
-  const request = new XMLHttpRequest();
-  request.open(methods.toUpperCase(), url, true);
-  headers && Object.keys(headers).map(
-    key => {
-      if (key.toUpperCase() === "Content-Type" && !data)
-        return delete headers[key];
-      request.setRequestHeader(key, headers[key]);
+    headers,
+    responseType
+  }: RequestConfig): AxiosPromise => {
+  const config = arguments[0]
+  return new Promise(resolve => {
+    const request = new XMLHttpRequest();
+
+    if (responseType) {
+      request.responseType = responseType;
     }
-  );
-  request.send(data);
+    request.onreadystatechange = function () {
+      if (request.readyState !== 4) return;
+      const headers = request.getAllResponseHeaders(),
+        data = responseType === "text" ? request.responseText : request.response,
+        response = {
+          data,
+          headers,
+          status: request.status,
+          statusText: request.statusText,
+          config,
+          request
+        };
+      resolve(response);
+    };
+
+    request.open(methods.toUpperCase(), url, true);
+    headers && Object.keys(headers).map(
+      key => {
+        if (key.toUpperCase() === "Content-Type" && !data)
+          return delete headers[key];
+        request.setRequestHeader(key, headers[key]);
+      }
+    );
+    request.send(data);
+
+  });
 };
 export default xml;

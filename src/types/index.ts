@@ -6,11 +6,23 @@ type Methods = 'get' | 'GET'
 |'put'|'PUT'
 |'patch'|'PATCH'
 
-export interface RequireConfig {
+export interface RequestConfig {
   url:string
   methods?:Methods
   data?:any
   params?:any
-  headers?:any
+  headers?:any,
+  responseType?:XMLHttpRequestResponseType
+}
+export interface AxiosResponse {
+  data:any
+  status:number
+  statusText:string
+  headers:any
+  config:RequestConfig
+  request:any
 }
 
+export interface AxiosPromise extends Promise<AxiosResponse>{
+
+}

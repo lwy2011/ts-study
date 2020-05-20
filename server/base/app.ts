@@ -93,3 +93,33 @@ axios(
     data: searchParams
   }
 );
+
+
+axios(
+  {
+    url: "/base/post",
+    methods: "post",
+    data: {
+      a: 6, b: 8
+    }
+  }
+).then(
+  res => {
+    console.log(res);
+  }
+);
+
+axios(
+  {
+    url: "/base/post",
+    methods: "post",
+    data: {
+      a: 6, b: 8
+    },
+    responseType: "json"
+  }
+).then(
+  res => {
+    console.log(res);
+  }
+);

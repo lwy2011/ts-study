@@ -29,7 +29,7 @@ class User {
     firstName: string;
     lastName: string;
 
-    constructor(firstName, lastName) {
+    constructor(firstName:string, lastName:string) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.fullName = firstName + " " + lastName;
