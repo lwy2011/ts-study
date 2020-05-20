@@ -1,12 +1,17 @@
 import {AxiosPromise, RequestConfig} from "./types";
 import xml from "./xml";
 import makeURL from "./helpers/url";
-import transformReqData from "./helpers/data";
+import transformReqData, {transformResData} from "./helpers/data";
 import processHeaders from "./helpers/headers";
 
 const axios = (config: RequestConfig): AxiosPromise => {
   processConfig(config);
-  return xml(config);
+  return xml(config).then(
+    res => {
+      res.data = transformResponseData(res.data);
+      return res;
+    }
+  );
 };
 
 function processConfig(config: RequestConfig) {
@@ -23,8 +28,12 @@ function transformRequireData({data}: RequestConfig) {
   return transformReqData(data);
 }
 
-function transformHeaders({headers={}, data}: RequestConfig) {
+function transformHeaders({headers = {}, data}: RequestConfig) {
   return processHeaders(headers, data);
+}
+
+function transformResponseData(data: any): any {
+  return transformResData(data);
 }
 
 export default axios;

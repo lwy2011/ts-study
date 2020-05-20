@@ -7,4 +7,14 @@ const transformReqData = (data: any) => {
   }
   return data;
 };
+export const transformResData = (data: any):any => {
+  if (typeof data === 'string'){
+    try {
+      data = JSON.parse(data)
+    }catch (e) {
+
+    }
+  }
+  return data
+};
 export default transformReqData;
