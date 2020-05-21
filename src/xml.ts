@@ -1,5 +1,6 @@
 import {AxiosPromise, AxiosResponse, RequestConfig} from "./types";
 import {processResponseHeaders} from "./helpers/headers";
+import {createError} from "./helpers/error";
 
 const xml = (
   {
@@ -23,7 +24,13 @@ const xml = (
 
     function processFailedStatus(response: AxiosResponse) {
       if (response.status >= 200 && response.status < 300) return resolve(response);
-      reject(new Error(`axios failed with status code ${response.status}!`));
+      reject(createError(
+        `axios failed with status code ${response.status}!`,
+        config,
+        true,
+        request,
+        response
+      ));
     }
 
     request.onreadystatechange = function () {
@@ -43,10 +50,19 @@ const xml = (
     };
 
     request.onerror = () => {
-      reject(new Error("Network Error!"));
+      reject(createError(
+        "Network Error!",
+        config,
+      ));
     };
     request.ontimeout = () => {
-      reject(new Error(`Timeout of ${timeout} ms exceeded!`));
+      reject(createError(
+        `Timeout of ${timeout} ms exceeded!`,
+        config,
+        true,
+        request,
+
+      ));
     };
 
     request.open(methods.toUpperCase(), url, true);

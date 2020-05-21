@@ -11,7 +11,6 @@ export class AxiosError extends Error {
   constructor(
     msg: string,
     config: RequestConfig,
-    isAxiosError: boolean,
     request?: XMLHttpRequest,
     response?: AxiosResponse,
     code?: string | null
@@ -21,17 +20,17 @@ export class AxiosError extends Error {
     this.request = request;
     this.response = response;
     this.code = code;
-    this.isAxiosError = isAxiosError;
+    this.isAxiosError = true;
+    Object.setPrototypeOf(this, AxiosError.prototype);
   }
 }
 
 export function createError(
   msg: string,
   config: RequestConfig,
-  isAxiosError: boolean,
   request?: XMLHttpRequest,
+  code?: string | null,
   response?: AxiosResponse,
-  code?: string | null
 ) {
-  return new AxiosError(msg, config, isAxiosError, request, response, code);
+  return new AxiosError(msg, config, request, response, code);
 }
