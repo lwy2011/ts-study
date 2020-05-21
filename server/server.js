@@ -35,10 +35,24 @@ router.post("/base/buffer", (req, res) => {
   req.on("data", chunk => {
     chunk && msg.push(chunk);
   });
-  req.on('end',()=>{
-    let buf = Buffer.concat(msg)
-    res.json(buf.toJSON())
-  })
+  req.on("end", () => {
+    let buf = Buffer.concat(msg);
+    res.json(buf.toJSON());
+  });
+});
+router.get("/error/get", (req, res) => {
+  res.json(req.query);
+});
+router.get("/error/timeout", (req, res) => {
+  setTimeout(
+    () => {
+      res.json(req.query);
+    }, 2100
+  );
+});
+router.get("/error/responseFailed", (req, res) => {
+  res.status(500);
+  res.end();
 });
 app.use(router);
 

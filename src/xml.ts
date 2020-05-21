@@ -1,4 +1,4 @@
-import {AxiosPromise, RequestConfig} from "./types";
+import {AxiosPromise, AxiosResponse, RequestConfig} from "./types";
 import {processResponseHeaders} from "./helpers/headers";
 
 const xml = (
@@ -7,17 +7,28 @@ const xml = (
     methods = "GET",
     data = null,
     headers,
-    responseType
+    responseType,
+    timeout
   }: RequestConfig): AxiosPromise => {
-  const config = arguments[0]
-  return new Promise(resolve => {
+  const config = arguments[0];
+  return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
 
     if (responseType) {
       request.responseType = responseType;
     }
+    if (timeout) {
+      request.timeout = timeout;
+    }
+
+    function processFailedStatus(response: AxiosResponse) {
+      if (response.status >= 200 && response.status < 300) return resolve(response);
+      reject(new Error(`axios failed with status code ${response.status}!`));
+    }
+
     request.onreadystatechange = function () {
       if (request.readyState !== 4) return;
+      if (request.status === 0) return;  //网络错误或者超时错误，为0
       const headers = processResponseHeaders(request.getAllResponseHeaders()),
         data = responseType === "text" ? request.responseText : request.response,
         response = {
@@ -28,7 +39,14 @@ const xml = (
           config,
           request
         };
-      resolve(response);
+      processFailedStatus(response);
+    };
+
+    request.onerror = () => {
+      reject(new Error("Network Error!"));
+    };
+    request.ontimeout = () => {
+      reject(new Error(`Timeout of ${timeout} ms exceeded!`));
     };
 
     request.open(methods.toUpperCase(), url, true);
