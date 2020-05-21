@@ -27,8 +27,8 @@ const xml = (
       reject(createError(
         `axios failed with status code ${response.status}!`,
         config,
-        true,
         request,
+        null,
         response
       ));
     }
@@ -53,15 +53,15 @@ const xml = (
       reject(createError(
         "Network Error!",
         config,
+        request
       ));
     };
     request.ontimeout = () => {
       reject(createError(
         `Timeout of ${timeout} ms exceeded!`,
         config,
-        true,
         request,
-
+        'ECONNABOUTED'
       ));
     };
 

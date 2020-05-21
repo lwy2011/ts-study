@@ -1,4 +1,5 @@
 import axios from "../../src";
+import {AxiosError} from "../../src/types";
 
 
 axios(
@@ -68,8 +69,8 @@ axios(
     console.log(res);
   }
 ).catch(
-  e => {
-    console.log(e);
+  (e:AxiosError)=> {
+    console.log(e.message,e.request,e.response,e.config,e.code);
   }
 );
 //模拟网络错误，刷新页面后，浏览器设置网络关闭进行模拟！
