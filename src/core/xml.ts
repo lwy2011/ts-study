@@ -1,6 +1,6 @@
-import {AxiosPromise, AxiosResponse, RequestConfig} from "./types";
-import {processResponseHeaders} from "./helpers/headers";
-import {createError} from "./helpers/error";
+import {AxiosPromise, AxiosResponse, RequestConfig} from "../types";
+import {processResponseHeaders} from "../helpers/headers";
+import {createError} from "../helpers/error";
 
 const xml = (
   {
@@ -65,7 +65,7 @@ const xml = (
       ));
     };
 
-    request.open(methods.toUpperCase(), url, true);
+    request.open(methods.toUpperCase(), url!, true);
     headers && Object.keys(headers).map(
       key => {
         if (key.toUpperCase() === "Content-Type" && !data)

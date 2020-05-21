@@ -7,7 +7,7 @@ type Methods = 'get' | 'GET'
 |'patch'|'PATCH'
 
 export interface RequestConfig {
-  url:string
+  url?:string
   methods?:Methods
   data?:any
   params?:any
@@ -35,4 +35,18 @@ export interface AxiosError extends Error {
   code?:string|null
   request?:XMLHttpRequest
   response?:AxiosResponse
+}
+
+export interface Axios {
+  request(config:RequestConfig):AxiosPromise
+  get(url:string,config?:RequestConfig):AxiosPromise
+  delete(url:string,config?:RequestConfig):AxiosPromise
+  head(url:string,config?:RequestConfig):AxiosPromise
+  options(url:string,config?:RequestConfig):AxiosPromise
+  post(url:string,data?:any,config?:RequestConfig):AxiosPromise
+  put(url:string,data?:any,config?:RequestConfig):AxiosPromise
+  patch(url:string,data?:any,config?:RequestConfig):AxiosPromise
+}
+export interface AxiosInstance extends Axios {
+  (config:RequestConfig):AxiosPromise
 }

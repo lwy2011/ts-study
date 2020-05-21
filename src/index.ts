@@ -1,5 +1,5 @@
 import {AxiosPromise, RequestConfig} from "./types";
-import xml from "./xml";
+import xml from "./core/xml";
 import makeURL from "./helpers/url";
 import transformReqData, {transformResData} from "./helpers/data";
 import processHeaders from "./helpers/headers";
