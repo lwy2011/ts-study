@@ -61,7 +61,7 @@ const xml = (
         `Timeout of ${timeout} ms exceeded!`,
         config,
         request,
-        'ECONNABOUTED'
+        "ECONNABOUTED"
       ));
     };
 

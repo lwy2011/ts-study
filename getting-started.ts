@@ -122,7 +122,7 @@ const x1 = (): void => {
 
 };
 //只能赋值undefined || null
-let x2: void = undefined || null;
+let x2:  undefined = void
 
 
 //null undefined

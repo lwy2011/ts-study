@@ -7,8 +7,8 @@ export class Axios {
     return dispatchRequest(config);
   }
 
-  _processDispatchRequestWithoutData(url: string, method: string, config?: RequestConfig):AxiosPromise {
-    return dispatchRequest(Object.assign(config || {url}, {url, method}));
+  _processDispatchRequestWithoutData(url: string, methods: string, config?: RequestConfig):AxiosPromise {
+    return dispatchRequest(Object.assign(config || {url}, {url, methods}));
   }
 
   get(url: string, config?: RequestConfig): AxiosPromise {
@@ -27,8 +27,8 @@ export class Axios {
     return this._processDispatchRequestWithoutData(url, "options", config);
   }
 
-  _processDispatchRequestWithData(url:string,method:string,data?:any,config?:RequestConfig):AxiosPromise {
-    return dispatchRequest(Object.assign(config || {url}, {url, method,data}));
+  _processDispatchRequestWithData(url:string,methods:string,data?:any,config?:RequestConfig):AxiosPromise {
+    return dispatchRequest(Object.assign(config || {url}, {url, methods,data}));
   }
   post(url:string,data?:any,config?:RequestConfig):AxiosPromise{
     return this._processDispatchRequestWithData(
