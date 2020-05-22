@@ -63,7 +63,11 @@ function extendRouters() {
   router.patch("/extend/patch", (req, res) => {
     res.json({k: "patch"});
   });
-
+  router.get('/extend/getUser',(req,res)=>{
+    res.json({
+      name:'jj',age:18,sex:'男'
+    })
+  })
 }
 
 function errorRouters() {

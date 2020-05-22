@@ -39,3 +39,17 @@ axios.patch(
 //函数重载：
 axios("/extend/get");
 axios("/extend/post", {methods: "post", data: {a: 1}});
+
+//接口添加泛型参数：对返回的数据的data字段进行类型断言：
+
+interface User {
+  name: string,
+  age: number,
+  sex: string
+}
+
+axios<User>("/extend/getUser").then(
+  res => {
+    console.log(res.data.name);  //这里就可以推断出有name属性！
+  }
+);
