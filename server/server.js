@@ -33,6 +33,11 @@ errorRouters();
 
 
 extendRouters();
+
+router.get("/interceptors/test", (req, res) => {
+  res.end("hello");
+});
+
 app.use(router);
 
 const port = process.env.PORT || 8081;
@@ -63,12 +68,12 @@ function extendRouters() {
   router.patch("/extend/patch", (req, res) => {
     res.json({k: "patch"});
   });
-  router.get('/extend/getUser',(req,res)=>{
+  router.get("/extend/getUser", (req, res) => {
     res.json({
-      message:'ok',
-      result:{ name:'jj',age:18,sex:'男'}
-    })
-  })
+      message: "ok",
+      result: {name: "jj", age: 18, sex: "男"}
+    });
+  });
 }
 
 function errorRouters() {

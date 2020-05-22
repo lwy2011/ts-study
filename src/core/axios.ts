@@ -1,8 +1,32 @@
-import {AxiosPromise, RequestConfig} from "../types";
+import {
+  AxiosPromise,
+  AxiosResponse,
+  RejectFn,
+  RequestConfig,
+  ResolveFn
+} from "../types";
 import {dispatchRequest} from "./dispatchRequest";
+import {InterceptorManager} from "./interceptorManager";
 
+
+interface PromiseChain<T> {
+  resolved: ResolveFn<T> | ((config: RequestConfig) => AxiosPromise)
+  rejected?: RejectFn
+}
 
 export class Axios {
+  interceptors: {
+    request: InterceptorManager<RequestConfig>
+    response: InterceptorManager<AxiosResponse>
+  };
+
+  constructor() {
+    this.interceptors = {
+      request: new InterceptorManager<RequestConfig>(),
+      response: new InterceptorManager<AxiosResponse>()
+    };
+  }
+
   request(url: any, config?: RequestConfig): AxiosPromise {
     if (typeof url === "string") {
       config = config || {};
@@ -10,7 +34,29 @@ export class Axios {
     } else {
       config = url as RequestConfig;
     }
-    return dispatchRequest(config);
+
+    const chain: PromiseChain<any>[] = [
+      {
+        resolved: dispatchRequest, rejected: undefined
+      }
+    ];
+    this.interceptors.request.forEach(
+      (interceptor) => {
+        chain.unshift(interceptor);
+      }
+    );
+    this.interceptors.response.forEach(
+      (interceptor) => {
+        chain.push(interceptor);
+      }
+    );
+    let promise = Promise.resolve(config);
+    while (chain.length) {
+      const {resolved, rejected} = chain.shift()!;   //断言一下
+      promise = promise.then(resolved, rejected);
+    }
+    return promise as AxiosPromise;   //这里不懂为什么会跟人家的不报错，推断出来了，我这推断不出来
+    // return dispatchRequest(config);
   }
 
   _processDispatchRequestWithoutData(url: string, methods: string, config?: RequestConfig): AxiosPromise {

@@ -9,6 +9,7 @@ export const dispatchRequest = (config: RequestConfig): AxiosPromise => {
   return xml(config).then(
     res => {
       res.data = transformResponseData(res.data);
+      console.log(res,'res');
       return res;
     }
   );
