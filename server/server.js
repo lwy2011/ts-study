@@ -65,7 +65,8 @@ function extendRouters() {
   });
   router.get('/extend/getUser',(req,res)=>{
     res.json({
-      name:'jj',age:18,sex:'男'
+      message:'ok',
+      result:{ name:'jj',age:18,sex:'男'}
     })
   })
 }

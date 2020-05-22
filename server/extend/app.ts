@@ -48,8 +48,25 @@ interface User {
   sex: string
 }
 
-axios<User>("/extend/getUser").then(
-  res => {
-    console.log(res.data.name);  //这里就可以推断出有name属性！
+interface ResponseData<T> {
+  message: string,
+  result: T
+}
+
+const getUser = <T>() => {
+  return axios<T>("/extend/getUser").then(
+    res => {
+      return res.data;
+    }
+  ).catch(
+    e => console.error("err!")
+  );
+};
+const user = async () => {
+  const val = await getUser<ResponseData<User>>();
+  if (val) {
+    console.log(val.result.name);
   }
-);
+};
+user();
+
