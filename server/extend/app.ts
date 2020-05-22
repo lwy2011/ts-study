@@ -36,4 +36,6 @@ axios.patch(
     a: 1, b: 4
   }
 );
-
+//函数重载：
+axios("/extend/get");
+axios("/extend/post", {methods: "post", data: {a: 1}});
