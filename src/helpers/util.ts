@@ -35,12 +35,14 @@ export function extend<T, U>(to: T, from: U): T & U {
 
 export function deepMerge(...objs: any[]): any {
   const result = Object.create(null);
+  // console.log(objs,'o');
   objs.map(
     obj => {
       if (obj) {
         Object.keys(obj).map(
           key => {
             const val = obj[key];
+            // console.log(val);
             if (isPlainObject(val)) {
               if (isPlainObject(result[key])) {
                 result[key] = deepMerge(result[key], val);
@@ -50,10 +52,12 @@ export function deepMerge(...objs: any[]): any {
             } else {
               result[key] = val;
             }
+            // console.log(result,'re');
           }
         );
       }
     }
   );
+  // console.log(result,'r');
   return result;
 }

@@ -1,4 +1,5 @@
-import {isPlainObject} from "./util";
+import {deepMerge, isPlainObject} from "./util";
+import {Methods} from "../types";
 
 function normalizeHeaderName(headers: any, normalizeName: string) {
   if (headers) {
@@ -32,9 +33,23 @@ export const processResponseHeaders = (str: string) => {
       if (val) {
         val = val.trim();
       }
-      headers[key] = val
+      headers[key] = val;
     }
   );
   return headers;
 };
 export default processHeaders;
+
+export function flattenHeaders(headers: any, methods: Methods): any {
+  if (!headers) return headers;
+  headers = deepMerge(headers.common, headers[methods], headers);
+  const methodsToDelete = [
+    "delete", "get", "post", "put", "options", "head", "patch", "common"
+  ];
+  methodsToDelete.map(
+    key => {
+      delete headers[key];
+    }
+  );
+  return headers;
+}

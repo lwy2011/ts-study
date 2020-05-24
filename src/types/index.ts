@@ -1,4 +1,4 @@
-type Methods = "get" | "GET"
+export type Methods = "get" | "GET"
   | "post" | "POST"
   | "delete" | "DELETE"
   | "options" | "OPTIONS"

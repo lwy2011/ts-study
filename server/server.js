@@ -37,7 +37,9 @@ extendRouters();
 router.get("/interceptors/test", (req, res) => {
   res.end("hello");
 });
-
+router.post("/default_config", (req, res) => {
+  res.json(req.body);
+});
 app.use(router);
 
 const port = process.env.PORT || 8081;

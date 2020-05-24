@@ -16,9 +16,9 @@ keysFromVal2.map(
   key => strats[key] = stratFromval2
 );
 
-function deepMergeStrat(val1: any, val2: any):any {
+function deepMergeStrat(val1: any, val2: any): any {
   if (isPlainObject(val2)) {
-    deepMerge(val1, val2);
+    return deepMerge(val1, val2);
   } else if (val2 !== undefined) {
     return val2;
   } else if (isPlainObject(val1)) {
@@ -27,22 +27,25 @@ function deepMergeStrat(val1: any, val2: any):any {
     return val1;
   }
 }
-const stratKeysDeepMerge = ['header']
+
+const stratKeysDeepMerge = ["headers"];
 stratKeysDeepMerge.map(
-  key=>{
-    strats[key] = deepMergeStrat
+  key => {
+    strats[key] = deepMergeStrat;
   }
-)
+);
 export const mergeConfig = (config1: RequestConfig, config2?: RequestConfig): RequestConfig => {
   config2 = config2 || {};
 
+  console.log(config1, config2, "cc");
 
   const config = Object.create(null);  //无原型！
   for (let key in config2) {
     mergeField(key);
+    // console.log(config,'fff');
   }
   for (let key in config1) {
-    if (config2 === undefined) {
+    if (config2[key] === undefined) {
       mergeField(key);
     }
   }
@@ -53,5 +56,6 @@ export const mergeConfig = (config1: RequestConfig, config2?: RequestConfig): Re
     config[k] = strat(config1[k], config2![k]);  //强制断言不是undefined ,上面预留了
   }
 
+  console.log(config);
   return config;
 };
