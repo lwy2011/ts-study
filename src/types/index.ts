@@ -1,4 +1,3 @@
-
 type Methods = "get" | "GET"
   | "post" | "POST"
   | "delete" | "DELETE"
@@ -41,9 +40,12 @@ export interface AxiosError extends Error {
 
 export interface Axios {
   interceptors: {
-  request: InterceptorManager<RequestConfig>
-  response: InterceptorManager<AxiosResponse>
-};
+    request: InterceptorManager<RequestConfig>
+    response: InterceptorManager<AxiosResponse>
+  };
+
+  defaultConfig:RequestConfig
+
   request<T = any>(config: RequestConfig): AxiosPromise<T>
 
   get<T = any>(url: string, config?: RequestConfig): AxiosPromise<T>
@@ -70,12 +72,14 @@ export interface AxiosInstance extends Axios {
 
 export interface InterceptorManager<T> {
   use(resolveFn: ResolveFn<T>, rejectFn?: RejectFn): number
+
   eject(id: number): void
+
   // forEach(interceptor:Interceptor<T>):void 内部方法，不让外部用
 }
 
 export interface ResolveFn<T> {
-  (config: T):T| Promise<T>
+  (config: T): T | Promise<T>
 }
 
 export interface RejectFn {

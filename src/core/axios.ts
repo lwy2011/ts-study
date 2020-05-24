@@ -19,8 +19,10 @@ export class Axios {
     request: InterceptorManager<RequestConfig>
     response: InterceptorManager<AxiosResponse>
   };
+  defaultConfig: RequestConfig;
 
-  constructor() {
+  constructor(defaultConfig: RequestConfig) {
+    this.defaultConfig = defaultConfig;
     this.interceptors = {
       request: new InterceptorManager<RequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
