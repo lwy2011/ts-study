@@ -7,6 +7,8 @@ import {
 } from "../types";
 import {dispatchRequest} from "./dispatchRequest";
 import {InterceptorManager} from "./interceptorManager";
+import {deepMerge} from "../helpers/util";
+import {mergeConfig} from "./mergeConfig";
 
 
 interface PromiseChain<T> {
@@ -36,7 +38,7 @@ export class Axios {
     } else {
       config = url as RequestConfig;
     }
-
+    config = mergeConfig(this.defaultConfig, config);
     const chain: PromiseChain<any>[] = [
       {
         resolved: dispatchRequest, rejected: undefined

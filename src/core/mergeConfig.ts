@@ -1,4 +1,5 @@
 import {RequestConfig} from "../types";
+import {deepMerge, isPlainObject} from "../helpers/util";
 
 function defaultStrat(val1: any, val2: any): any {
   return val2 !== undefined ? val2 : val1;
@@ -15,6 +16,23 @@ keysFromVal2.map(
   key => strats[key] = stratFromval2
 );
 
+function deepMergeStrat(val1: any, val2: any):any {
+  if (isPlainObject(val2)) {
+    deepMerge(val1, val2);
+  } else if (val2 !== undefined) {
+    return val2;
+  } else if (isPlainObject(val1)) {
+    return deepMerge(val1);
+  } else if (val1 !== undefined) {
+    return val1;
+  }
+}
+const stratKeysDeepMerge = ['header']
+stratKeysDeepMerge.map(
+  key=>{
+    strats[key] = deepMergeStrat
+  }
+)
 export const mergeConfig = (config1: RequestConfig, config2?: RequestConfig): RequestConfig => {
   config2 = config2 || {};
 

@@ -12,6 +12,7 @@ const xml = (
     timeout
   }: RequestConfig): AxiosPromise => {
   const config = arguments[0];
+
   return new Promise((resolve, reject) => {
     const request = new XMLHttpRequest();
 
