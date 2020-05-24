@@ -14,6 +14,7 @@ export interface RequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
+  [k:string]:any   //字符串索引签名
 }
 
 export interface AxiosResponse<T = any> {
