@@ -36,9 +36,6 @@ stratKeysDeepMerge.map(
 );
 export const mergeConfig = (config1: RequestConfig, config2?: RequestConfig): RequestConfig => {
   config2 = config2 || {};
-
-  console.log(config1, config2, "cc");
-
   const config = Object.create(null);  //无原型！
   for (let key in config2) {
     mergeField(key);

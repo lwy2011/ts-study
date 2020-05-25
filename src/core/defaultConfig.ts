@@ -1,4 +1,6 @@
 import {RequestConfig} from "../types";
+import transformReqData, {transformResData} from "../helpers/data";
+import processHeaders from "../helpers/headers";
 
 
 export const defaultConfig: RequestConfig = {
@@ -9,7 +11,18 @@ export const defaultConfig: RequestConfig = {
       "Accept": "application/json,text/plain, */*"
     },
 
-  }
+  },
+  transformRequest: [
+    function (data: any, headers: any): any {
+      processHeaders(headers, data);
+      return transformReqData(data);
+    }
+  ],
+  transformResponse: [
+    function (data: any): any {
+      return transformResData(data);
+    }
+  ]
 };
 
 const methodsNoData = ["delete", "head", "get", "options"],

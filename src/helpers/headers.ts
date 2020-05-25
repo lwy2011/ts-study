@@ -20,7 +20,6 @@ const processHeaders = (headers: any, data: any) => {
   if (isPlainObject(data)) {
     headers["Content-Type"] = "application/json;charset=utf-8";
   }
-  console.log(headers);
   return headers;
 };
 export const processResponseHeaders = (str: string) => {

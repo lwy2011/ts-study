@@ -9,7 +9,9 @@ const xml = (
     data = null,
     headers,
     responseType,
-    timeout
+    timeout,
+    transformRequest,
+    transformResponse
   }: RequestConfig): AxiosPromise => {
   const config = arguments[0];
 

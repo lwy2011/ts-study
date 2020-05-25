@@ -14,7 +14,15 @@ export interface RequestConfig {
   headers?: any
   responseType?: XMLHttpRequestResponseType
   timeout?: number
-  [k:string]:any   //字符串索引签名
+
+  transformRequest?: AxiosTransform | AxiosTransform[]
+  transformResponse?: AxiosTransform | AxiosTransform[]
+
+  [k: string]: any   //字符串索引签名
+}
+
+export interface AxiosTransform {
+  (data: any, headers?: any): any
 }
 
 export interface AxiosResponse<T = any> {
@@ -45,7 +53,7 @@ export interface Axios {
     response: InterceptorManager<AxiosResponse>
   };
 
-  defaultConfig:RequestConfig
+  defaultConfig: RequestConfig
 
   request<T = any>(config: RequestConfig): AxiosPromise<T>
 
