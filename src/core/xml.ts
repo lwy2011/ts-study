@@ -11,7 +11,8 @@ const xml = (
     responseType,
     timeout,
     transformRequest,
-    transformResponse
+    transformResponse,
+    cancelToken
   }: RequestConfig): AxiosPromise => {
   const config = arguments[0];
 
@@ -76,6 +77,14 @@ const xml = (
         request.setRequestHeader(key, headers[key]);
       }
     );
+
+    if (cancelToken) {
+      cancelToken.promise.then(reason => {
+        request.abort();
+        reject(reason);
+      });
+    }
+
     request.send(data);
 
   });
