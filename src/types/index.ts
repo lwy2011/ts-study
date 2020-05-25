@@ -18,6 +18,8 @@ export interface RequestConfig {
   transformRequest?: AxiosTransform | AxiosTransform[]
   transformResponse?: AxiosTransform | AxiosTransform[]
 
+  cancelToken?:CancelToken
+
   [k: string]: any   //字符串索引签名
 }
 
@@ -96,5 +98,16 @@ export interface ResolveFn<T> {
 
 export interface RejectFn {
   (error: any): any
+}
+
+export interface CancelToken {
+  promise:Promise<string>
+  reason?:string
+}
+export interface Canceler {
+  (msg?:string):void
+}
+export interface CancelExecutor {
+  (cancel:Canceler):void
 }
 
