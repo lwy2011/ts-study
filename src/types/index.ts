@@ -82,7 +82,7 @@ export interface AxiosInstance extends Axios {
 
 export interface AxiosStatic extends AxiosInstance {
   create(config?:RequestConfig):AxiosInstance
-  cancelToken:CancelToken
+  cancelToken:CancelTokenStatic
   cancel:CancelStatic
   isCancel:(data:any)=>boolean
 }

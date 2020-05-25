@@ -5,7 +5,7 @@ import {flattenHeaders} from "../helpers/headers";
 import {transform} from "./transform";
 
 export const dispatchRequest = (config: RequestConfig): AxiosPromise => {
-  throwIfCancellationRequested(config);
+  throwIfCancellationRequested(config);  //防抖
   processConfig(config);
   return xml(config).then(
     res => {

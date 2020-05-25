@@ -17,7 +17,7 @@ export class CancelToken {
 
     executor(msg => {
       if (this.reason) return;
-      this.reason = new Cancel(msg)
+      this.reason = new Cancel(msg);
       resolvePromise(this.reason);
     });
   }
@@ -31,9 +31,10 @@ export class CancelToken {
       cancel, token
     };
   }
-  throwIfRequested(){
-    if (this.reason){
-      throw this.reason
+
+  throwIfRequested() {
+    if (this.reason) {
+      throw this.reason;
     }
   }
 }

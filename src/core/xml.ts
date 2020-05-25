@@ -78,7 +78,7 @@ const xml = (
       }
     );
 
-    if (cancelToken) {
+    if (cancelToken) {   //除了dispatchRequest那里的防抖，这里做了可主动调用用于随意cancel的接口！
       cancelToken.promise.then(reason => {
         request.abort();
         reject(reason);

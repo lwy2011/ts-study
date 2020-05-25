@@ -40,6 +40,8 @@ router.get("/interceptors/test", (req, res) => {
 router.post("/default_config", (req, res) => {
   res.json(req.body);
 });
+
+cancelRouters();
 app.use(router);
 
 const port = process.env.PORT || 8081;
@@ -111,6 +113,19 @@ function baseRouters() {
       let buf = Buffer.concat(msg);
       res.json(buf.toJSON());
     });
+  });
+}
+
+function cancelRouters() {
+  router.get("/cancel/get", (req, res) => {
+    setTimeout(() => {
+      res.json("ok");
+    }, 1000);
+  });
+  router.post("/cancel/post", (req, res) => {
+    setTimeout(() => {
+      res.json(req.body);
+    }, 1000);
   });
 }
 
