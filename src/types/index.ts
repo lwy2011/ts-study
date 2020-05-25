@@ -82,6 +82,9 @@ export interface AxiosInstance extends Axios {
 
 export interface AxiosStatic extends AxiosInstance {
   create(config?:RequestConfig):AxiosInstance
+  cancelToken:CancelToken
+  cancel:CancelStatic
+  isCancel:(data:any)=>boolean
 }
 
 export interface InterceptorManager<T> {
@@ -100,9 +103,10 @@ export interface RejectFn {
   (error: any): any
 }
 
-export interface CancelToken {
-  promise:Promise<string>
-  reason?:string
+export interface CancelToken {  //这是实例的接口，下面的是类的接口！
+  promise:Promise<Cancel>
+  reason?:Cancel
+  throwIfRequested():void
 }
 export interface Canceler {
   (msg?:string):void
@@ -115,7 +119,14 @@ export interface CancelTokenSource {
   cancel:Canceler
 }
 
-export interface CancelTokenStatic {
+export interface CancelTokenStatic {  //这是类的接口
   new(executor:CancelExecutor):CancelToken
   source():CancelTokenSource
+}
+
+export interface Cancel {
+  message?:string
+}
+export interface CancelStatic {
+  new(message?:string):Cancel
 }
