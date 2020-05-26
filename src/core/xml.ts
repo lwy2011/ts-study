@@ -78,7 +78,9 @@ const xml = (
       }
     );
 
-    if (cancelToken) {   //除了dispatchRequest那里的防抖，这里做了可主动调用用于随意cancel的接口！
+    if (cancelToken) {   //除了dispatchRequest那里的防抖，
+      // 这里做了预留cancel的接口！，这是Promise的pending状态改变之后，要执行的then的内容！
+      //也就是对外只暴露Promise的resolve方法，这个可以进入resolve状态的方法！
       cancelToken.promise.then(reason => {
         request.abort();
         reject(reason);

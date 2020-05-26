@@ -17,7 +17,7 @@ export class CancelToken {
 
     executor(msg => {
       if (this.reason) return;
-      this.reason = new Cancel(msg);
+      this.reason = new Cancel(msg);  //这是判断是否确定要取消的标准！
       resolvePromise(this.reason);
     });
   }
