@@ -12,7 +12,8 @@ const xml = (
     timeout,
     transformRequest,
     transformResponse,
-    cancelToken
+    cancelToken,
+    withCredentials
   }: RequestConfig): AxiosPromise => {
   const config = arguments[0];
 
@@ -24,6 +25,10 @@ const xml = (
     }
     if (timeout) {
       request.timeout = timeout;
+    }
+
+    if (withCredentials){
+      request.withCredentials = withCredentials   //跨区请求发送时，设置发送请求，携带跨域站点的cookie！
     }
 
     function processFailedStatus(response: AxiosResponse) {

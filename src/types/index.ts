@@ -18,7 +18,10 @@ export interface RequestConfig {
   transformRequest?: AxiosTransform | AxiosTransform[]
   transformResponse?: AxiosTransform | AxiosTransform[]
 
+
   cancelToken?:CancelToken
+
+  withCredentials?:boolean
 
   [k: string]: any   //字符串索引签名
 }

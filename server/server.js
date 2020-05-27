@@ -2,9 +2,11 @@ const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackConfig = require("./webpack.config");
 const express = require("express");
+const CookieParser = require("cookie-parser");
 const app = express();
 const compiler = webpack(webpackConfig);
 const bodyParser = require("body-parser");
+require("./server2");  //跨域情况下！
 app.use(webpackDevMiddleware(compiler, {
   publicPath: "/__build__/",
   stats: {
@@ -17,7 +19,7 @@ app.use(webpackDevMiddleware(compiler));
 app.use(express.static(__dirname));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-
+app.use(CookieParser());
 const router = express.Router();
 router.get("/simple/get", (req, res) => {
   res.json({
@@ -42,6 +44,13 @@ router.post("/default_config", (req, res) => {
 });
 
 cancelRouters();
+
+
+router.get("/more/get", (req, res) => { //同域
+  console.log(req.cookies);
+  res.json(req.cookies);
+});
+
 app.use(router);
 
 const port = process.env.PORT || 8081;
