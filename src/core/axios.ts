@@ -64,7 +64,8 @@ export class Axios {
   }
 
   _processDispatchRequestWithoutData(url: string, methods: string, config?: RequestConfig): AxiosPromise {
-    return dispatchRequest(Object.assign(config || {url}, {url, methods}));
+    //这里和下面都补充了defaultConfig的合并！暂时先如此，出了问题再说！
+    return dispatchRequest(Object.assign(this.defaultConfig, config || {url}, {url, methods}));
   }
 
   get(url: string, config?: RequestConfig): AxiosPromise {
@@ -84,7 +85,11 @@ export class Axios {
   }
 
   _processDispatchRequestWithData(url: string, methods: string, data?: any, config?: RequestConfig): AxiosPromise {
-    return dispatchRequest(Object.assign(config || {url}, {url, methods, data}));
+    return dispatchRequest(Object.assign(this.defaultConfig, config || {url}, {
+      url,
+      methods,
+      data
+    }));
   }
 
   post(url: string, data?: any, config?: RequestConfig): AxiosPromise {

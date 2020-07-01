@@ -18,8 +18,8 @@ export const dispatchRequest = (config: RequestConfig): AxiosPromise => {
 function processConfig(config: RequestConfig) {
   config.url = transformURL(config);
   config.data = transform(config.data, config.headers, config.transformRequest);
-  console.log(config, "ccc");
   config.headers = flattenHeaders(config.headers, config.methods!);  //断言一定会有的！
+  console.log(config, "ccc");
 }
 
 function transformURL({url, params}: RequestConfig): string {

@@ -16,7 +16,12 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 app.use(webpackDevMiddleware(compiler));
-app.use(express.static(__dirname));
+app.use(express.static(__dirname,{
+  setHeaders(res){
+    res.cookie('XSRF-TOKEN-D','123asd')
+    //防止xsrf攻击的后端设置！跟请求端的xsrfCookieName对应
+  }
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(CookieParser());

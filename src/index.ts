@@ -9,7 +9,7 @@ import {CancelToken} from "./cancelToken/cancelToken";
 
 function createInstance(defaultConfig: RequestConfig): AxiosStatic {
   const Context = new Axios(defaultConfig);
-  const axios = Context.request.bind(Context);
+  const axios = Axios.prototype.request.bind(Context);
   extend(axios, Context);
   return axios as AxiosStatic;
 }
