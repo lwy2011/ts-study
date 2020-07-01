@@ -23,6 +23,9 @@ export interface RequestConfig {
 
   withCredentials?:boolean
 
+  xsrfCookieName?: string
+  xsrfHeaderName?: string
+
   [k: string]: any   //字符串索引签名
 }
 

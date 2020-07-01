@@ -22,7 +22,9 @@ export const defaultConfig: RequestConfig = {
     function (data: any): any {
       return transformResData(data);
     }
-  ]
+  ],
+  xsrfCookieName: "XSRF-TOKEN",
+  xsrfHeaderName: "X-XSRF-TOKEN"
 };
 
 const methodsNoData = ["delete", "head", "get", "options"],

@@ -1,6 +1,8 @@
 import {AxiosPromise, AxiosResponse, RequestConfig} from "../types";
 import {processResponseHeaders} from "../helpers/headers";
 import {createError} from "../helpers/error";
+import {isURLSameOrigin} from "../helpers/url";
+import cookie from "../helpers/cookie";
 
 const xml = (
   {
@@ -13,7 +15,11 @@ const xml = (
     transformRequest,
     transformResponse,
     cancelToken,
-    withCredentials
+    withCredentials,
+
+    xsrfCookieName,
+    xsrfHeaderName
+
   }: RequestConfig): AxiosPromise => {
   const config = arguments[0];
 
@@ -27,8 +33,14 @@ const xml = (
       request.timeout = timeout;
     }
 
-    if (withCredentials){
-      request.withCredentials = withCredentials   //跨区请求发送时，设置发送请求，携带跨域站点的cookie！
+    if (withCredentials) {
+      request.withCredentials = withCredentials;   //跨区请求发送时，设置发送请求，携带跨域站点的cookie！
+    }
+    if ((withCredentials || isURLSameOrigin(url!)) && xsrfCookieName) {
+      const xsrfValue = cookie.read(xsrfCookieName);
+      if (xsrfValue && xsrfHeaderName) {
+        headers[xsrfHeaderName] = xsrfValue;
+      }
     }
 
     function processFailedStatus(response: AxiosResponse) {

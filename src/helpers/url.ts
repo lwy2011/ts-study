@@ -1,4 +1,4 @@
-import {encode, isDate,  isPlainObject} from "./util";
+import {encode, isDate, isPlainObject} from "./util";
 
 const makeURL = (url: string, params?: any): string => {
   const parts: string[] = [];
@@ -39,3 +39,25 @@ const makeURL = (url: string, params?: any): string => {
 };
 
 export default makeURL;
+
+interface URLOrigin {
+  host: string
+  protocol: string
+}
+
+export function isURLSameOrigin(url: string): boolean {
+  const currentOrigin = resolveURL(window.location.href);
+  const parsedOrigin = resolveURL(url);
+  return currentOrigin.host === parsedOrigin.host &&
+    currentOrigin.protocol === parsedOrigin.protocol;
+}
+
+const urlParsingNode = document.createElement("a");
+
+function resolveURL(url: string): URLOrigin {
+  urlParsingNode.setAttribute("href", url);
+  const {protocol, host} = urlParsingNode;
+  return {
+    protocol, host
+  };
+}
