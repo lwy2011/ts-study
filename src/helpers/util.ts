@@ -61,3 +61,8 @@ export function deepMerge(...objs: any[]): any {
   // console.log(result,'r');
   return result;
 }
+
+
+export function isFormData(data:any):data is FormData {
+  return data !== undefined && data instanceof FormData
+}

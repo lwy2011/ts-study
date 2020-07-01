@@ -26,6 +26,9 @@ export interface RequestConfig {
   xsrfCookieName?: string
   xsrfHeaderName?: string
 
+  onDownloadProgress?:(e:ProgressEvent)=>void
+  onUploadProgress?:(e:ProgressEvent)=>void
+
   [k: string]: any   //字符串索引签名
 }
 
