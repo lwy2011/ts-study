@@ -6,6 +6,8 @@ const CookieParser = require("cookie-parser");
 const app = express();
 const compiler = webpack(webpackConfig);
 const bodyParser = require("body-parser");
+const muiltiparty = require("connect-multiparty");
+const path = require('path')
 require("./server2");  //跨域情况下！
 app.use(webpackDevMiddleware(compiler, {
   publicPath: "/__build__/",
@@ -16,15 +18,18 @@ app.use(webpackDevMiddleware(compiler, {
 }));
 
 app.use(webpackDevMiddleware(compiler));
-app.use(express.static(__dirname,{
-  setHeaders(res){
-    res.cookie('XSRF-TOKEN-D','123asd')
+app.use(express.static(__dirname, {
+  setHeaders(res) {
+    res.cookie("XSRF-TOKEN-D", "123asd");
     //防止xsrf攻击的后端设置！跟请求端的xsrfCookieName对应
   }
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(CookieParser());
+app.use(muiltiparty(   //上传文件的中间键
+  {uploadDir:path.resolve(__dirname,'upload-file')}
+))
 const router = express.Router();
 router.get("/simple/get", (req, res) => {
   res.json({
@@ -56,6 +61,11 @@ router.get("/more/get", (req, res) => { //同域
   res.json(req.cookies);
 });
 
+router.post("/more/upload", (req, res) => {
+  console.log(req.body, req.files);
+  res.end("upload success!");
+});
+
 app.use(router);
 
 const port = process.env.PORT || 8081;
@@ -63,6 +73,7 @@ const port = process.env.PORT || 8081;
 module.exports = app.listen(port, () => {
   console.log(`${port} listening`);
 });
+
 
 function extendRouters() {
   router.get("/extend/get", (req, res) => {
