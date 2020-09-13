@@ -1635,3 +1635,58 @@ const arr :(string|number)[] = [2,4,'6']
   }
   const getName1 = (data:Person)=>data.name
 }
+
+//联合类型，类型保护
+
+{
+  interface Bird {
+    fly:boolean
+    sing():void
+  }
+  interface Dog {
+    fly:boolean
+    dark():void
+  }
+  function trainAnimal(animal:Bird|Dog){
+    animal.fly     //联合类型，只默认为公有的属性方法，各自私有的联合类型不会有！
+    animal.sing()   //需要类型保护
+    animal.dark()  //需要类型保护
+
+    // 类型断言进行类型保护：
+    if (animal.fly){
+      (animal as Bird).sing()
+    }else {
+      (animal as Dog).dark()
+    }
+
+    // in语法来做类型保护
+    if ('sing' in animal){  //这里的ts会很智能！适用于很互补的联合类型！
+      animal.sing()
+    }else {
+      animal.dark()
+    }
+  }
+
+  //typeof 对普通类型的联合类型做保护
+  function X(a:number|string,b:number|string){
+    a+b  ; //不行
+    if (typeof a === 'string' && typeof b === 'string'){
+      return a+b
+    }
+    if ( typeof a === 'number' && typeof b === 'number'){
+      return a+b
+    }
+  }
+
+  // instanceof  对类的联合类型的类型保护
+  class A {
+    count:number
+  }
+  function add (first:object|A,second:object|A){
+    first.count
+    second.count
+    if (first instanceof A){
+      first.count
+    }
+  }
+}
