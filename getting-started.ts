@@ -1690,3 +1690,76 @@ const arr :(string|number)[] = [2,4,'6']
     }
   }
 }
+
+// 枚举类型
+{
+  enum Status {
+    OFFLINE,
+    ONLINE,
+    DELETED
+  }
+  //等同于这样的对象：
+  // {
+  //   OFFLINE:0,
+  //   ONLINE:1,
+  //   DELETED:2,
+  //   0:'OFFLINE',
+  //   1:'ONLINE',
+  //   2:'DELETED'
+  // }
+  // 相当于字典，而且是双向映射的字典，key-value,value-key。
+
+  //调用：
+  Status[0]
+  Status.ONLINE
+
+  //默认是从0开始自增的。可以自定义从哪里由多少开始自增
+  {
+    enum  Status {
+      OFFLINE,
+      ONLINE = 3,
+      DELETED
+    }
+    enum  Status1 {
+      OFFLINE=1,
+      ONLINE ,
+      DELETED
+    }
+    Status1[0]   //undefined
+  }
+}
+
+
+//函数泛型
+
+{
+  function X(a:number|string,b:number|string){
+    return `S{a}${b}`
+  }
+  function x1(a:number,b:number) {
+
+  }
+  function x2(a:string,b:string) {
+
+  }
+  //有逻辑可以共用，抽象提升一层：
+  function x3<T>(a:T,b:T) {
+
+  }
+  x3<string>('d',4)
+  x3<string>('d','4')
+
+  //对参数的类型可以深加工：
+  function x4<T>(a:T[]) {
+
+  }
+  x4<string>(['d'])
+
+  //对函数的返回值设置:
+  function x5<T>(a:T,b:T):T {
+    return a
+  }
+
+  //ts 会自动推断，如果不显式定义类型：
+  x5('r','g')
+}
