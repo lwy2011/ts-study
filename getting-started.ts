@@ -1842,32 +1842,66 @@ let n1: number | null = 5;  //这样保险！
   // 泛型的继承
   //假如T里面必须要有某些属性或者方法：
   interface Item {
-    name:string
+    name: string
   }
-  class DataManager<T extends Item>{
-    constructor(private data:T[]) {
+
+  class DataManager<T extends Item> {
+    constructor(private data: T[]) {
     }
-    getItemName(ind:number):string {
-      return this.data[ind].name
+
+    getItemName(ind: number): string {
+      return this.data[ind].name;
     }
   }
+
   //泛型的取值的限制，指定个别类型：
-  class A <T extends string|number>{  //T限制在string/number类型中了
-    constructor(private data:T[]) {
+  class A<T extends string | number> {  //T限制在string/number类型中了
+    constructor(private data: T[]) {
     }
-    getItem(ind:number):T{
-      const val = this.data[ind]
-      if (typeof val === 'string')
-      return val.slice(0) as T;
-      return (val as number + 3) as T;
+
+    getItem(ind: number): T {
+      const val = this.data[ind];
+      if (typeof val === "string")
+        return val.slice(0) as T;
+      if (typeof val === "number")
+        return (val + 3) as T;
+      return val;
     }
   }
+
+  type T = number | string
+
+  class B<X> {
+    constructor(private data: X[]) {
+    }
+
+    getItem(index: number) {
+      const val = this.data[index];
+      if ("slice" in val) {
+        return val + "l";
+      }
+      if (typeof val === "number") {
+        return val + 4;
+      }
+    }
+
+    push(item: X) {
+      this.data.push(item);
+    }
+  }
+
+
+  const b = new B<T>([0]);
+  const n = b.getItem(0) + "d";
+  b.push(n);
+
+
   //用泛型做类型注解：
-  const f:()=>string = ()=>{
-    return 'ss'
-  }
-  type F = <T>(param:T)=>T
-  const f1:F = (val)=>{
-    return val
-  }
+  const f: () => string = () => {
+    return "ss";
+  };
+  type F = <T>(param: T) => T
+  const f1: F = (val) => {
+    return val;
+  };
 }
