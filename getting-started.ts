@@ -1315,31 +1315,32 @@ let n1: number | null = 5;  //这样保险！
 {
   const arr = [1, 4];
   arr.push("3");
-  const arr1:(number|string)[] = [2,'4']
-  const arr2:undefined[] = []
-  const arr3:{name:string}[] = [{name:'3',b:3},{}]
+  const arr1: (number | string)[] = [2, "4"];
+  const arr2: undefined[] = [];
+  const arr3: { name: string }[] = [{name: "3", b: 3}, {}];
 
   //类型别名：
-  type User =  {name:string,b:number}
+  type User = { name: string, b: number }
 
-  const arr4:User[] = [{name:'e',b:4}]
+  const arr4: User[] = [{name: "e", b: 4}];
 
   //类在ts里被检测类型的时候，当成对象检测：
   class Person {
-    name:string;
-    age:number;
+    name: string;
+    age: number;
   }
-  const arr5:Person[] = [
-    {name:'d',age:4}
-  ]
+
+  const arr5: Person[] = [
+    {name: "d", age: 4}
+  ];
 }
 
 //元组
 {
   // 需求是想要数组的下标的值，进行类型声明，而数组，上面的，只能笼统地声明数组内有什么类型
-const arr :(string|number)[] = [2,4,'6']
+  const arr: (string | number)[] = [2, 4, "6"];
   //需求是想要[2,'6',4]这样，0坐标数字，1坐标字符串，2坐标数字，下标与类型绑定，有限可枚举的感觉
-  const arr1 :[number,string,number] = [2,'6',4]
+  const arr1: [number, string, number] = [2, "6", 4];
   //多应用于数据库文件vsc里的数据格式转换为元组类型！它就是可枚举的限制死的数组而已！
 }
 
@@ -1348,77 +1349,86 @@ const arr :(string|number)[] = [2,4,'6']
 {
   //定义通用性的变量数据类型
   interface Person {
-    name:string,
-    age?:number,   //可有可无
-    readonly sex?:string  //只读，可有可无
+    name: string,
+    age?: number,   //可有可无
+    readonly sex?: string  //只读，可有可无
   }
-  function getName(data:Person){
-    return data.name
+
+  function getName(data: Person) {
+    return data.name;
   }
-  function setName(data:Person,name:string){
-    data.name = name
+
+  function setName(data: Person, name: string) {
+    data.name = name;
   }
+
   //与类型别名type 的区别
-  type Person1 = {name:string}
+  type Person1 = { name: string }
   //没啥区别，但是type可以定义基本类型
   type X = string
-  interface Y string //不行，只能定义函数或对象
+
+  interface Y
+
+  string; //不行，只能定义函数或对象
   //能用interface 就用！
 
   const data = {
-    name:'s',
-    x:5  //不是Person类型
-  }
-  getName(data)  //不报错，因为对变量的检查，只看符不符合必须有的类型属性，字面量检查不严格
-  setName(data,'r')
+    name: "s",
+    x: 5  //不是Person类型
+  };
+  getName(data);  //不报错，因为对变量的检查，只看符不符合必须有的类型属性，字面量检查不严格
+  setName(data, "r");
   getName({
-    name:'s',
-    x:5  //不是Person类型  ,报错了，不是字面量形式，ts检查很严格
-  })
+    name: "s",
+    x: 5  //不是Person类型  ,报错了，不是字面量形式，ts检查很严格
+  });
 
   //想要多出其他的可扩展的属性，用：
   interface Person2 {
-    name:string,
-    age?:number,   //可有可无
-    readonly sex?:string  //只读，可有可无
-    [propName:string]:any  //预留扩展
+    name: string,
+    age?: number,   //可有可无
+    readonly sex?: string  //只读，可有可无
+    [propName: string]: any  //预留扩展
   }
+
   //可以添加方法：
   interface Person3 {
-    name:string,
-    age?:number,   //可有可无
-    readonly sex?:string,  //只读，可有可无
-    say():string
+    name: string,
+    age?: number,   //可有可无
+    readonly sex?: string,  //只读，可有可无
+    say(): string
   }
 
   //类应用接口：类必须要有接口里的方法属性
 
   class Teacher implements Person3 {
-    name = 'r' ;   //必须要有
+    name = "r";   //必须要有
     say(): string {  //必须要有
-      return 'r'
+      return "r";
     }
   }
 
   // 继承
   interface Man extends Person {
-    do():void   //自己私有的，并且继承了Person的必须有的。
+    do(): void   //自己私有的，并且继承了Person的必须有的。
   }
-  const man:Man = {
-    name:'f'
-  }
-  const man1:Man = {
-    name:'g',
+
+  const man: Man = {
+    name: "f"
+  };
+  const man1: Man = {
+    name: "g",
     do(): void {
 
     }
-  }
+  };
 
   //函数接口,用的不多
   interface SayHi {
-    (str:string):string
+    (str: string): string
   }
-  const sayHi:SayHi = (str)=>str
+
+  const sayHi: SayHi = (str) => str;
 }
 
 
@@ -1426,21 +1436,24 @@ const arr :(string|number)[] = [2,4,'6']
 {
   // 声明
   class Person {
-    name = 'dell'
-    getName(){
-      return this.name
+    name = "dell";
+
+    getName() {
+      return this.name;
     }
   }
-  const person = new Person()    //Person类
+
+  const person = new Person();    //Person类
 
 
   //继承
   class Teacher extends Person {
-    getTeacherName(){     //私有的
-      return 'teacher'
+    getTeacherName() {     //私有的
+      return "teacher";
     }
+
     getName(): string {      //覆盖掉父类的方法
-      return 'lee' + super.getName()    //调用父类的方法属性
+      return "lee" + super.getName();    //调用父类的方法属性
     }
   }
 }
@@ -1451,35 +1464,37 @@ const arr :(string|number)[] = [2,4,'6']
   //public 类内外都可以被使用
 
   class Person {
-    name :string   //默认为 public
-    sayHi(){
+    name: string;   //默认为 public
+    sayHi() {
       this.name;   //类内
-      console.log('hi');
+      console.log("hi");
     }
   }
-  const person = new Person()
-  person.name = 'dell'      //类外
-  console.log(person.name)
-  person.sayHi()    //类外
+
+  const person = new Person();
+  person.name = "dell";      //类外
+  console.log(person.name);
+  person.sayHi();    //类外
 }
 {
   //private 类内被使用
 
   class Person {
-    private name :string   //默认为 public
-    sayHi(){
+    private name: string;   //默认为 public
+    sayHi() {
       this.name;   //类内
-      console.log('hi');
+      console.log("hi");
     }
   }
-  const person = new Person()
-  person.name = 'dell'      //类外
-  console.log(person.name)
-  person.sayHi()    //类外
+
+  const person = new Person();
+  person.name = "dell";      //类外
+  console.log(person.name);
+  person.sayHi();    //类外
 
   class Teacher extends Person {
     sayHi() {
-      this.name     //继承子类中使用
+      this.name;     //继承子类中使用
       super.sayHi();
     }
   }
@@ -1489,24 +1504,26 @@ const arr :(string|number)[] = [2,4,'6']
     //protected 类内和继承子类,实例中不可以！
 
     class Person {
-      protected name :string   //默认为 public
-      sayHi(){
+      protected name: string;   //默认为 public
+      sayHi() {
         this.name;   //类内
-        console.log('hi');
+        console.log("hi");
       }
     }
-    const person = new Person()
-    person.name = 'dell'      //类外
-    console.log(person.name)
-    person.sayHi()    //类外
+
+    const person = new Person();
+    person.name = "dell";      //类外
+    console.log(person.name);
+    person.sayHi();    //类外
     class Teacher extends Person {
       sayHi() {
-        this.name     //继承子类中使用
+        this.name;     //继承子类中使用
         super.sayHi();
       }
     }
-    const teacher = new Teacher()
-    teacher.name   //实例中使用
+
+    const teacher = new Teacher();
+    teacher.name;   //实例中使用
   }
 }
 
@@ -1515,39 +1532,46 @@ const arr :(string|number)[] = [2,4,'6']
 {
   class Person {
     //传统写法
-    name:string
-    constructor(name:string) {   //new 的时候，自动执行！
-      this.name = name
+    name: string;
+
+    constructor(name: string) {   //new 的时候，自动执行！
+      this.name = name;
     }
   }
+
   class Person1 {
     //简写写法
-    constructor(public name:string) {   //new 的时候，自动执行！
+    constructor(public name: string) {   //new 的时候，自动执行！
 
     }
   }
-  const person = new Person1('dell')
+
+  const person = new Person1("dell");
 }
 {
   class Person {
-    constructor(public name:string) {
+    constructor(public name: string) {
     }
   }
-  class Teacher extends Person{
+
+  class Teacher extends Person {
     constructor() {
       super();   //为了实现继承操作，也就是实现原型链的链接，所以必须要有这步！
       //传不传参，看父类的构造器的参数！为了实现初始化
     }
   }
+
   class Man extends Person {
     constructor() {
-      super('man');
+      super("man");
     }
   }
+
   //就算父类没有构造器：
   class X {
 
   }
+
   class Y extends X {
     constructor() {
       super();  //这步也要有，为了实现原型链
@@ -1559,134 +1583,154 @@ const arr :(string|number)[] = [2,4,'6']
 // 静态属性，getter,setter
 
 {
-  class Person{
-    constructor(private _name:string) {   //私有属性
+  class Person {
+    constructor(private _name: string) {   //私有属性
     }
+
     //但是想要外部拿到这个属性的值，用get中转：
-    get name(){
-      return this._name + 'xx'
+    get name() {
+      return this._name + "xx";
     }
+
     //有了getter就必须要有setter:
-    set name(name:string){
-      this._name = name
+    set name(name: string) {
+      this._name = name;
     }
   }
-  const person = new Person('liu')
-  person._name   //想要一些变量私有化,外部不能直接拿到
-  person.name
-  person.name = 'haha'  //想设置，因为有getter,设置就需要setter了,没setter,属性是read-only的
+
+  const person = new Person("liu");
+  person._name;   //想要一些变量私有化,外部不能直接拿到
+  person.name;
+  person.name = "haha";  //想设置，因为有getter,设置就需要setter了,没setter,属性是read-only的
 
   //静态属性，单例模式：
   class A {
 
   }
-  const a1 = new A()
-  const a2 = new A()
+
+  const a1 = new A();
+  const a2 = new A();
+
   // 这样得到的两个实例是两个不同的实例
   class B {
-    constructor(name:string) {
+    constructor(name: string) {
 
     }
 
-    private static  instance:B
-    static getInstance(name:string){  //类的静态属性，只有类自己可以调用
-      if(!this.instance){
-        this.instance = new B(name)
+    private static instance: B;
+
+    static getInstance(name: string) {  //类的静态属性，只有类自己可以调用
+      if (!this.instance) {
+        this.instance = new B(name);
       }
-      return this.instance
+      return this.instance;
     }
   }
-  const b1 = B.getInstance('b1')
-  const b2 = B.getInstance('b2')
+
+  const b1 = B.getInstance("b1");
+  const b2 = B.getInstance("b2");
 }
 
 //抽象类
 {
   //多个类有共性的属性方法，就提出来一个抽象类，然后继承这个抽象类：
   abstract class Person {
-    name:string
-    abstract getName():string
+    name: string;
+
+    abstract getName(): string
   }
-  class Teacher extends Person{  //继承了抽象类的属性方法后，就一定要有这些！
+
+  class Teacher extends Person {  //继承了抽象类的属性方法后，就一定要有这些！
     getName(): string {
-      return 'd'
+      return "d";
     }
   }
 }
 //接口抽象
 {
   interface Teacher {
-    name:string
+    name: string
   }
+
   interface Student {
-    name:string,age:number
+    name: string,
+    age: number
   }
-  const getName = (data:Student|Teacher)=>data.name
+
+  const getName = (data: Student | Teacher) => data.name;
 
   //提取公共属性：
   interface Person {
-    name:string
+    name: string
   }
-  interface Student1 extends Person{
-    age:number
+
+  interface Student1 extends Person {
+    age: number
   }
-  interface Teacher extends Person{
-    teachingAge:number
+
+  interface Teacher extends Person {
+    teachingAge: number
   }
-  const getName1 = (data:Person)=>data.name
+
+  const getName1 = (data: Person) => data.name;
 }
 
 //联合类型，类型保护
 
 {
   interface Bird {
-    fly:boolean
-    sing():void
+    fly: boolean
+
+    sing(): void
   }
+
   interface Dog {
-    fly:boolean
-    dark():void
+    fly: boolean
+
+    dark(): void
   }
-  function trainAnimal(animal:Bird|Dog){
-    animal.fly     //联合类型，只默认为公有的属性方法，各自私有的联合类型不会有！
-    animal.sing()   //需要类型保护
-    animal.dark()  //需要类型保护
+
+  function trainAnimal(animal: Bird | Dog) {
+    animal.fly;     //联合类型，只默认为公有的属性方法，各自私有的联合类型不会有！
+    animal.sing();   //需要类型保护
+    animal.dark();  //需要类型保护
 
     // 类型断言进行类型保护：
-    if (animal.fly){
-      (animal as Bird).sing()
-    }else {
-      (animal as Dog).dark()
+    if (animal.fly) {
+      (animal as Bird).sing();
+    } else {
+      (animal as Dog).dark();
     }
 
     // in语法来做类型保护
-    if ('sing' in animal){  //这里的ts会很智能！适用于很互补的联合类型！
-      animal.sing()
-    }else {
-      animal.dark()
+    if ("sing" in animal) {  //这里的ts会很智能！适用于很互补的联合类型！
+      animal.sing();
+    } else {
+      animal.dark();
     }
   }
 
   //typeof 对普通类型的联合类型做保护
-  function X(a:number|string,b:number|string){
-    a+b  ; //不行
-    if (typeof a === 'string' && typeof b === 'string'){
-      return a+b
+  function X(a: number | string, b: number | string) {
+    a + b; //不行
+    if (typeof a === "string" && typeof b === "string") {
+      return a + b;
     }
-    if ( typeof a === 'number' && typeof b === 'number'){
-      return a+b
+    if (typeof a === "number" && typeof b === "number") {
+      return a + b;
     }
   }
 
   // instanceof  对类的联合类型的类型保护
   class A {
-    count:number
+    count: number;
   }
-  function add (first:object|A,second:object|A){
-    first.count
-    second.count
-    if (first instanceof A){
-      first.count
+
+  function add(first: object | A, second: object | A) {
+    first.count;
+    second.count;
+    if (first instanceof A) {
+      first.count;
     }
   }
 }
@@ -1698,6 +1742,7 @@ const arr :(string|number)[] = [2,4,'6']
     ONLINE,
     DELETED
   }
+
   //等同于这样的对象：
   // {
   //   OFFLINE:0,
@@ -1710,22 +1755,24 @@ const arr :(string|number)[] = [2,4,'6']
   // 相当于字典，而且是双向映射的字典，key-value,value-key。
 
   //调用：
-  Status[0]
-  Status.ONLINE
+  Status[0];
+  Status.ONLINE;
 
   //默认是从0开始自增的。可以自定义从哪里由多少开始自增
   {
-    enum  Status {
+    enum Status {
       OFFLINE,
       ONLINE = 3,
       DELETED
     }
-    enum  Status1 {
-      OFFLINE=1,
-      ONLINE ,
+
+    enum Status1 {
+      OFFLINE = 1,
+      ONLINE,
       DELETED
     }
-    Status1[0]   //undefined
+
+    Status1[0];   //undefined
   }
 }
 
@@ -1733,33 +1780,94 @@ const arr :(string|number)[] = [2,4,'6']
 //函数泛型
 
 {
-  function X(a:number|string,b:number|string){
-    return `S{a}${b}`
+  function X(a: number | string, b: number | string) {
+    return `S{a}${b}`;
   }
-  function x1(a:number,b:number) {
+
+  function x1(a: number, b: number) {
 
   }
-  function x2(a:string,b:string) {
+
+  function x2(a: string, b: string) {
 
   }
+
   //有逻辑可以共用，抽象提升一层：
-  function x3<T>(a:T,b:T) {
+  function x3<T>(a: T, b: T) {
 
   }
-  x3<string>('d',4)
-  x3<string>('d','4')
+
+  x3<string>("d", 4);
+  x3<string>("d", "4");
 
   //对参数的类型可以深加工：
-  function x4<T>(a:T[]) {
+  function x4<T>(a: T[]) {
 
   }
-  x4<string>(['d'])
+
+  x4<string>(["d"]);
 
   //对函数的返回值设置:
-  function x5<T>(a:T,b:T):T {
-    return a
+  function x5<T>(a: T, b: T): T {
+    return a;
   }
 
   //ts 会自动推断，如果不显式定义类型：
-  x5('r','g')
+  x5("r", "g");
+}
+// 类中的泛型
+{
+  class DateMananer {
+    constructor(private data: string[] | number[]) {
+    }
+
+    getItem(index: number): string | number {
+      return this.data[index];
+    }
+  }
+
+  const dataManager = new DateMananer([2]);
+  dataManager.getItem(0);
+
+  //有并列的因果映射，可以再次深层抽象化的逻辑：
+  class DataManager1<T> {   //把可编程的那部分公共逻辑，抽离成泛型的参数
+    constructor(private data: T[]) {
+    }
+
+    getItem(ind: number): T {
+      return this.data[ind];
+    }
+  }
+
+  // 泛型的继承
+  //假如T里面必须要有某些属性或者方法：
+  interface Item {
+    name:string
+  }
+  class DataManager<T extends Item>{
+    constructor(private data:T[]) {
+    }
+    getItemName(ind:number):string {
+      return this.data[ind].name
+    }
+  }
+  //泛型的取值的限制，指定个别类型：
+  class A <T extends string|number>{  //T限制在string/number类型中了
+    constructor(private data:T[]) {
+    }
+    getItem(ind:number):T{
+      const val = this.data[ind]
+      if (typeof val === 'string')
+      return val.slice(0) as T;
+      return (val as number + 3) as T;
+    }
+  }
+  //用泛型做类型注解：
+  const f:()=>string = ()=>{
+    return 'ss'
+  }
+  type F = <T>(param:T)=>T
+  const f1:F = (val)=>{
+    return val
+  }
 }
