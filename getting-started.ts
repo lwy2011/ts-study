@@ -1905,3 +1905,72 @@ let n1: number | null = 5;  //这样保险！
     return val;
   };
 }
+
+// 命名空间
+{
+  //编译后都是全局变量：
+  class Header {
+    constructor(){
+      const elem = document.createElement('div')
+      elem.innerText = 'header'
+      document.appendChild(elem)
+    }
+  }
+  class Content {
+    constructor(){
+      const elem = document.createElement('div')
+      elem.innerText = 'content'
+      document.appendChild(elem)
+    }
+  }
+  class Footer {
+    constructor(){
+      const elem = document.createElement('div')
+      elem.innerText = 'footer'
+      document.appendChild(elem)
+    }
+  }
+  class Page {
+    constructor() {
+      new Header()
+      new Content()
+      new Footer()
+    }
+  }
+
+  //namespace 为的是像webpack那样，模块化开发，编译打包后都是一个个闭包函数，
+  //暴露出来预留的接口！使用方法：
+  namespace Home {
+    class Header {
+      constructor(){
+        const elem = document.createElement('div')
+        elem.innerText = 'header'
+        document.appendChild(elem)
+      }
+    }
+    class Content {
+      constructor(){
+        const elem = document.createElement('div')
+        elem.innerText = 'content'
+        document.appendChild(elem)
+      }
+    }
+    class Footer {
+      constructor(){
+        const elem = document.createElement('div')
+        elem.innerText = 'footer'
+        document.appendChild(elem)
+      }
+    }
+    export class Page {   //暴露的
+      constructor() {
+        new Header()
+        new Content()
+        new Footer()
+      }
+    }
+  }
+  Home.Page   //能暴露什么，就要加上export
+  Home.Header
+  Home.Content
+}
