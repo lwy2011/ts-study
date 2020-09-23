@@ -1973,4 +1973,35 @@ let n1: number | null = 5;  //这样保险！
   Home.Page   //能暴露什么，就要加上export
   Home.Header
   Home.Content
+
+  // 命名空间的跨文件引用
+  {
+    namespace Components{
+      //可以导出类型定义：
+      export interface User {
+        name:string
+      }
+      export class X {
+
+      }
+      //还可以嵌套命名空间：
+      export namespace Child{
+        export class A {
+
+        }
+      }
+    }
+
+    //其他文件引用Components时，可以直接引用，因为这是全局的变量Components，
+    //但是为了可读性，其他文件引用的出处表示，可以加上:
+    ///<reference path='./**/**.**' />
+  }
+  Components.X
+  const user :Components.User ={name:7}
+  Components.Child.A
+
+  //跨文件引用，打包时会报错，因为打包了多个文件结果，html文件只会导入一个打包结果，否则太麻烦了
+  //只有打包成一个文件：
+  //配置 outFile，设置打包的路径和最终文件名，同时配置module为amd，commonjs已经不够用了，会报错！
+
 }
