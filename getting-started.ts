@@ -2005,3 +2005,13 @@ let n1: number | null = 5;  //这样保险！
   //配置 outFile，设置打包的路径和最终文件名，同时配置module为amd，commonjs已经不够用了，会报错！
 
 }
+//import 导入模块
+{
+  //modules : amd   模式，需要导入cdn 的 require.js的补充文件！
+  //ts文件需要export 导出模块
+  //使用模块 ：
+  require(['Home'],function(page){   //requireJS的使用。
+    new page.default()
+  })
+  //webpack 会自动打包，不需要人为导入require.js。
+}
