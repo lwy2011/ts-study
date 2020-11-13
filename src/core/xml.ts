@@ -25,6 +25,7 @@ const xml = (
     onUploadProgress
 
   }: RequestConfig): AxiosPromise => {
+  // @ts-ignore
   const config = arguments[0];
 
   return new Promise((resolve, reject) => {
