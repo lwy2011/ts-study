@@ -29,6 +29,7 @@ export interface RequestConfig {
   onDownloadProgress?:(e:ProgressEvent)=>void
   onUploadProgress?:(e:ProgressEvent)=>void
   auth?:AxiosBasicCredentials
+  validateStatus?:(status:number)=>boolean
 
   [k: string]: any   //字符串索引签名
 }

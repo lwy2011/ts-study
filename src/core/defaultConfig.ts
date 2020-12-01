@@ -24,7 +24,10 @@ export const defaultConfig: RequestConfig = {
     }
   ],
   xsrfCookieName: "XSRF-TOKEN",
-  xsrfHeaderName: "X-XSRF-TOKEN"
+  xsrfHeaderName: "X-XSRF-TOKEN",
+  validateStatus(status){
+    return status>=200 && status<300
+  }
 };
 
 const methodsNoData = ["delete", "head", "get", "options"],

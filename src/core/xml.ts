@@ -23,7 +23,8 @@ const xml = (
 
     onDownloadProgress,
     onUploadProgress,
-    auth
+    auth,
+    validateStatus
 
   }: RequestConfig): AxiosPromise => {
   // @ts-ignore
@@ -91,7 +92,7 @@ const xml = (
 
     function processEvents() {
       function processFailedStatus(response: AxiosResponse) {
-        if (response.status >= 200 && response.status < 300) return resolve(response);
+        if (!validateStatus || validateStatus(response.status)) return resolve(response);
         reject(createError(
           `axios failed with status code ${response.status}!`,
           config,

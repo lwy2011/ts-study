@@ -72,13 +72,17 @@ router.post("/more/auth", (req, res) => {
   console.log(atob(credential));
   const [username, password] = atob(credential).split(":");
   if (type === "Basic" && username === "liu" && password === "123456") {
-    res.json({username,password});
+    res.json({username, password});
   } else {
     res.status(401);
     res.end("UnAuthorization");
   }
 });
 
+router.get("/more/validateStatus", (req, res) => {
+  res.status(304);
+  res.end("upload success!");
+});
 app.use(router);
 
 const port = process.env.PORT || 8081;
