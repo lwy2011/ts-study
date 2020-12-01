@@ -28,6 +28,7 @@ export interface RequestConfig {
 
   onDownloadProgress?:(e:ProgressEvent)=>void
   onUploadProgress?:(e:ProgressEvent)=>void
+  auth?:AxiosBasicCredentials
 
   [k: string]: any   //字符串索引签名
 }
@@ -138,4 +139,9 @@ export interface Cancel {
 }
 export interface CancelStatic {
   new(message?:string):Cancel
+}
+
+export interface AxiosBasicCredentials {
+  username:string
+  password:string
 }

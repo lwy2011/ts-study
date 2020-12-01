@@ -22,7 +22,8 @@ const xml = (
     xsrfHeaderName,
 
     onDownloadProgress,
-    onUploadProgress
+    onUploadProgress,
+    auth
 
   }: RequestConfig): AxiosPromise => {
   // @ts-ignore
@@ -74,6 +75,11 @@ const xml = (
         delete headers["Content-Type"];
         delete headers["content-type"];
       }
+
+      if (auth){
+        headers['Authorization'] = 'Basic ' + btoa(auth.username+':'+auth.password)
+      }
+
       headers && Object.keys(headers).map(
         key => {
           if (key.toUpperCase() === "Content-Type" && !data)

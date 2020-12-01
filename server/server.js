@@ -7,7 +7,8 @@ const app = express();
 const compiler = webpack(webpackConfig);
 const bodyParser = require("body-parser");
 const muiltiparty = require("connect-multiparty");
-const path = require('path')
+const path = require("path");
+const atob = require("atob");
 require("./server2");  //跨域情况下！
 app.use(webpackDevMiddleware(compiler, {
   publicPath: "/__build__/",
@@ -28,8 +29,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(CookieParser());
 app.use(muiltiparty(   //上传文件的中间键
-  {uploadDir:path.resolve(__dirname,'upload-file')}
-))
+  {uploadDir: path.resolve(__dirname, "upload-file")}
+));
 const router = express.Router();
 router.get("/simple/get", (req, res) => {
   res.json({
@@ -64,6 +65,18 @@ router.get("/more/get", (req, res) => { //同域
 router.post("/more/upload", (req, res) => {
   console.log(req.body, req.files);
   res.end("upload success!");
+});
+router.post("/more/auth", (req, res) => {
+  const auth = req.headers.authorization;
+  const [type, credential] = auth.split(" ");
+  console.log(atob(credential));
+  const [username, password] = atob(credential).split(":");
+  if (type === "Basic" && username === "liu" && password === "123456") {
+    res.json({username,password});
+  } else {
+    res.status(401);
+    res.end("UnAuthorization");
+  }
 });
 
 app.use(router);
