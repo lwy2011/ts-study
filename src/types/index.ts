@@ -30,6 +30,7 @@ export interface RequestConfig {
   onUploadProgress?:(e:ProgressEvent)=>void
   auth?:AxiosBasicCredentials
   validateStatus?:(status:number)=>boolean
+  paramsSerializer?:(params:any)=>string
 
   [k: string]: any   //字符串索引签名
 }

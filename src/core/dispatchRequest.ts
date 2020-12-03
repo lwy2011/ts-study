@@ -22,8 +22,8 @@ function processConfig(config: RequestConfig) {
   console.log(config, "ccc");
 }
 
-function transformURL({url, params}: RequestConfig): string {
-  return makeURL(url!, params);
+function transformURL({url, params,paramsSerializer}: RequestConfig): string {
+  return makeURL(url!, params,paramsSerializer);
 }
 
 // function transformRequireData({data}: RequestConfig) {

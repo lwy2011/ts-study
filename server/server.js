@@ -83,6 +83,9 @@ router.get("/more/validateStatus", (req, res) => {
   res.status(304);
   res.end("upload success!");
 });
+router.get("/more/paramsSerializer", (req, res) => {
+  res.end("ok");
+});
 app.use(router);
 
 const port = process.env.PORT || 8081;

@@ -24,7 +24,7 @@ const xml = (
     onDownloadProgress,
     onUploadProgress,
     auth,
-    validateStatus
+    validateStatus,
 
   }: RequestConfig): AxiosPromise => {
   // @ts-ignore
